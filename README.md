@@ -1,0 +1,56 @@
+# PaveVision PG-PDN Demonstration Package
+
+This repository accompanies the manuscript "Physics-guided pavement degradation prediction from grid-level semantic distress maps".
+
+The package is designed for method inspection and software reuse. It exposes the PG-PDN architecture, feature schema, loss function, visualization utilities and synthetic demonstration records. It does not include raw point clouds, full-route feature tables, trained model weights, author-specific working files or any data needed to reconstruct the restricted field surveys.
+
+## What Is Included
+
+- `pgpdn/`: lightweight Python implementation of the PG-PDN inference architecture.
+- `configs/pgpdn_default.yaml`: architecture and physical-parameter defaults reported in the manuscript.
+- `examples/`: runnable examples using synthetic data only.
+- `sample_data/`: small synthetic feature tables for checking input/output formats.
+- `supplementary/`: method notes, data-release statement and figure-generation guidance.
+
+## What Is Not Included
+
+- Raw mobile mapping point clouds, images or LiDAR scans.
+- Full-route survey data and full-route feature tables.
+- Trained PG-PDN checkpoints or any learned full-data model weights.
+- Data that can identify survey routes beyond the non-sensitive descriptions reported in the paper.
+
+## Feature Schema
+
+Each grid cell is represented by the 12-dimensional feature vector used in the manuscript:
+
+```text
+[PQI*, ESAL, P, DeltaT, F, D1, D2, D3, D4, I_mean, I_std, I_low]
+```
+
+where `PQI*` is the current grid-level pavement quality index, `ESAL` is expressed in units of 10^4, `P` is precipitation in mm, `DeltaT` is the mean daily temperature range in degrees Celsius, `F` is the number of low-temperature days with mean daily temperature below 0 degC, `D1`--`D4` are distress densities for transverse cracks, longitudinal cracks, alligator cracks and potholes, and `I_mean`, `I_std`, `I_low` are LiDAR intensity features.
+
+## Quick Start
+
+Install the minimal dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+Run the synthetic inference example:
+
+```bash
+python examples/run_inference_template.py --features sample_data/synthetic_grid_features.csv
+```
+
+Generate a synthetic quality-map preview:
+
+```bash
+python examples/plot_synthetic_quality_map.py --features sample_data/synthetic_grid_features.csv --output outputs/synthetic_quality_map.png
+```
+
+The default model uses initialized physical parameters and random neural weights. The numerical outputs are not calibrated predictions; they are provided only to verify the architecture and data flow.
+
+## Citation
+
+Please cite the associated manuscript if you use this code or adapt the PG-PDN architecture.
