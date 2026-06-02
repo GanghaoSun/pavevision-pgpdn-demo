@@ -10,7 +10,7 @@ PaveVision is an English-language pavement quality assessment and performance-pr
 
 ### Route Map and Quality Popup
 
-The route-map view provides the first entry point for pavement engineers. Clicking a route opens a quality summary popup with the survey period, public sample length, mean PQI*, distress deduction, number of 20 m maintenance units and 0.5 m grid resolution.
+The route-map view provides the first entry point for pavement engineers. The preview below is zoomed to Route 1 and Route 2 so that the GPS traces and nearby road corridors remain visible. Clicking a route opens a quality summary popup with the survey period, public sample length, mean PQI*, distress deduction, number of 20 m maintenance units and 0.5 m grid resolution.
 
 ![PaveVision route map with pavement quality popup](assets/web_route_map_popup.png)
 
