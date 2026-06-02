@@ -6,11 +6,11 @@ The package is designed for method inspection and software reuse. It exposes the
 
 ## PaveVision Interface Preview
 
-PaveVision is an English-language pavement quality assessment and performance-prediction interface built around semantic distress maps and grid-level PG-PDN inference. The screenshots below illustrate the public demonstration workflow and visual layout; they are provided as interface previews rather than additional experimental evidence.
+PaveVision is a pavement quality assessment and performance-prediction interface built around semantic distress maps and grid-level PG-PDN inference. The screenshots below are captured from the local HTML system launched by `run.bat`; they illustrate the public demonstration workflow and visual layout rather than providing additional experimental evidence.
 
 ### Route Map and Quality Popup
 
-The route-map view provides the first entry point for pavement engineers. The preview below is zoomed to Route 1 and Route 2 so that the GPS traces and nearby road corridors remain visible. Clicking a route opens a quality summary popup with the survey period, public sample length, mean PQI*, distress deduction, number of 20 m maintenance units and 0.5 m grid resolution.
+The route-map view provides the first entry point for pavement engineers. The preview keeps the Chinese basemap used in the local system because it better matches the visible road network around the GPS traces. Clicking a route opens a quality summary popup with the survey period, public sample length, mean PQI*, distress deduction, number of 20 m maintenance units and 0.5 m grid resolution.
 
 ![PaveVision route map with pavement quality popup](assets/web_route_map_popup.png)
 
