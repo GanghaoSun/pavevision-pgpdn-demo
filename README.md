@@ -2,11 +2,11 @@
 
 This repository accompanies the manuscript "Physics-guided pavement degradation prediction from grid-level semantic distress maps".
 
-The package is designed for method inspection and software reuse. It exposes the PG-PDN architecture, feature schema, loss function, visualization utilities and synthetic demonstration records. It does not include raw point clouds, full-route feature tables, trained model weights, author-specific working files or any data needed to reconstruct the restricted field surveys.
+The package is designed for method inspection, frontend visualization and software reuse. It exposes the PG-PDN architecture, feature schema, loss function, visualization utilities, a browser-based PaveVision demo and processed public demonstration records. It does not include raw point clouds, full-route feature tables, trained full-data weights, author-specific working files or any data needed to reconstruct the restricted field surveys.
 
 ## PaveVision Interface Preview
 
-PaveVision is a pavement quality assessment and performance-prediction interface built around semantic distress maps and grid-level PG-PDN inference. The screenshots below are captured from the local HTML system launched by `run.bat`; they illustrate the public demonstration workflow and visual layout rather than providing additional experimental evidence.
+PaveVision is a pavement quality assessment and performance-prediction interface built around semantic distress maps and grid-level PG-PDN outputs. The screenshots below are captured from the local PaveVision system under `web系统开发`; the public repository provides the same frontend layout in `web_demo/` and serves precomputed demo outputs rather than executing the restricted prediction pipeline.
 
 ### Route Map and Quality Popup
 
@@ -54,10 +54,12 @@ The fig10 series visualizes Route 3 at 0.5 m grid resolution: March 2024 measure
 
 ## What Is Included
 
+- `web_demo/`: Flask-based public PaveVision frontend demo using precomputed 600 m sample outputs.
 - `pgpdn/`: lightweight Python implementation of the PG-PDN inference architecture.
 - `configs/pgpdn_default.yaml`: architecture and physical-parameter defaults reported in the manuscript.
 - `examples/`: runnable examples using synthetic data only.
 - `sample_data/`: small synthetic feature tables for checking input/output formats.
+- `web_demo/data/sample/`: processed public sample JSON files aligned with the manuscript route definitions, survey periods and 0.5 m visualization workflow.
 - `supplementary/`: method notes, data-release statement and figure-generation guidance.
 
 ## What Is Not Included
@@ -65,7 +67,8 @@ The fig10 series visualizes Route 3 at 0.5 m grid resolution: March 2024 measure
 - Raw mobile mapping point clouds, images or LiDAR scans.
 - Full-route survey data and full-route feature tables.
 - Trained PG-PDN checkpoints or any learned full-data model weights.
-- Data that can identify survey routes beyond the non-sensitive descriptions reported in the paper.
+- Core training scripts, full-data inference services or private prediction pipelines bound to the web UI.
+- Raw GPS logs or complete mobile mapping trajectories; the web demo includes only simplified display polylines for the route-map view.
 
 ## Feature Schema
 
@@ -79,7 +82,28 @@ where `PQI*` is the current grid-level pavement quality index, `ESAL` is express
 
 ## Quick Start
 
-Install the minimal dependencies:
+Run the public PaveVision web demo:
+
+```bash
+python -m pip install -r web_demo/requirements.txt
+python web_demo/app.py
+```
+
+On Windows, the one-click launcher can be used from the repository root:
+
+```bat
+run_web_demo.bat
+```
+
+Then open:
+
+```text
+http://localhost:5000
+```
+
+The web demo's prediction button loads precomputed PG-PDN demonstration outputs from `web_demo/data/sample/`. It does not train PG-PDN, load full-data weights or run the restricted research prediction pipeline.
+
+For the Python PG-PDN architecture examples, install the minimal modeling dependencies:
 
 ```bash
 pip install -r requirements.txt

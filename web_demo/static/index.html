@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PaveVision | Pavement Quality Assessment and Prediction</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+            --bg: #0f1923;
+            --panel: #172332;
+            --card: #1f2e3f;
+            --card2: #26384b;
+            --border: #31455c;
+            --text: #e8eef5;
+            --muted: #9aacbd;
+            --accent: #00b4d8;
+            --green: #00c853;
+            --yellow: #ffd600;
+            --red: #ff5252;
+        }
+        body {
+            height: 100vh;
+            overflow: hidden;
+            background: var(--bg);
+            color: var(--text);
+            font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+        }
+        .navbar {
+            height: 54px;
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            padding: 0 22px;
+            background: var(--panel);
+            border-bottom: 1px solid var(--border);
+        }
+        .logo {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--accent);
+            letter-spacing: 0.2px;
+        }
+        .tabs { display: flex; gap: 6px; }
+        .tab {
+            border: 0;
+            border-radius: 6px;
+            background: transparent;
+            color: var(--muted);
+            padding: 8px 16px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+        .tab:hover { background: var(--card2); color: var(--text); }
+        .tab.active { background: var(--accent); color: #fff; }
+        .nav-note { margin-left: auto; color: var(--muted); font-size: 12px; }
+        .page { display: none; height: calc(100vh - 54px); }
+        .page.active { display: flex; }
+        #map { width: 100%; height: 100%; }
+        .map-wrap { position: relative; flex: 1; }
+        .legend {
+            position: absolute;
+            right: 20px;
+            bottom: 18px;
+            z-index: 500;
+            width: 230px;
+            padding: 14px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: rgba(15, 25, 35, 0.94);
+            font-size: 12px;
+        }
+        .legend h4 { color: var(--accent); margin-bottom: 8px; font-size: 13px; }
+        .legend-row { display: flex; align-items: center; gap: 8px; margin: 6px 0; color: var(--muted); }
+        .swatch { width: 24px; height: 5px; border-radius: 4px; display: inline-block; }
+        .info-bar {
+            height: 40px;
+            background: var(--panel);
+            border-top: 1px solid var(--border);
+            color: var(--muted);
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            padding: 0 18px;
+            font-size: 12px;
+        }
+        .sidebar {
+            width: 330px;
+            flex: 0 0 330px;
+            overflow-y: auto;
+            background: var(--panel);
+            border-right: 1px solid var(--border);
+            padding: 14px;
+        }
+        .main {
+            flex: 1;
+            min-width: 0;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        .toolbar {
+            height: 48px;
+            flex: 0 0 48px;
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+            background: var(--panel);
+            border-bottom: 1px solid var(--border);
+            color: var(--muted);
+            font-size: 13px;
+        }
+        .toolbar strong { color: var(--text); margin-right: 10px; }
+        .toolbar span:last-child { margin-left: auto; }
+        .content { flex: 1; overflow-y: auto; padding: 16px; }
+        .grid-layout { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 16px; }
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 14px;
+            margin-bottom: 12px;
+        }
+        .card-title {
+            color: var(--accent);
+            font-size: 13px;
+            font-weight: 700;
+            padding-bottom: 8px;
+            margin-bottom: 10px;
+            border-bottom: 1px solid var(--border);
+        }
+        .route-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 8px;
+            cursor: pointer;
+        }
+        .route-card.active, .route-card:hover { border-color: var(--accent); background: rgba(0, 180, 216, 0.08); }
+        .route-name { font-weight: 700; margin-bottom: 5px; }
+        .route-desc, .small { color: var(--muted); font-size: 12px; line-height: 1.55; }
+        select, input {
+            width: 100%;
+            background: var(--bg);
+            color: var(--text);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 8px 10px;
+            font-size: 13px;
+        }
+        .btn {
+            border: 0;
+            border-radius: 6px;
+            padding: 8px 14px;
+            background: var(--accent);
+            color: #fff;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 13px;
+        }
+        .btn.secondary { background: transparent; border: 1px solid var(--border); color: var(--muted); }
+        .btn.secondary.active, .btn.secondary:hover { border-color: var(--accent); color: var(--accent); }
+        .btn.full { width: 100%; margin-top: 6px; }
+        .button-row { display: flex; gap: 8px; flex-wrap: wrap; }
+        .metric-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+        .metric {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+        }
+        .metric-value { color: var(--accent); font-size: 24px; font-weight: 800; }
+        .metric-label { color: var(--muted); font-size: 11px; margin-top: 4px; }
+        canvas { max-width: 100%; background: #111c28; border: 1px solid var(--border); border-radius: 8px; }
+        .chart { width: 100%; height: 240px; }
+        .chart-sm { width: 100%; height: 210px; }
+        .table-wrap { max-height: 300px; overflow-y: auto; }
+        table { width: 100%; border-collapse: collapse; font-size: 12px; }
+        th, td { border: 1px solid var(--border); padding: 6px 8px; text-align: center; }
+        th { background: var(--card2); color: var(--accent); font-weight: 700; }
+        td { color: var(--text); }
+        .badge { display: inline-block; padding: 2px 7px; border-radius: 4px; color: #101820; font-weight: 700; }
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.65);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal.active { display: flex; }
+        .modal-box {
+            width: min(1200px, 92vw);
+            height: min(760px, 88vh);
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+        }
+        .modal-head {
+            height: 52px;
+            display: flex;
+            align-items: center;
+            padding: 0 18px;
+            border-bottom: 1px solid var(--border);
+        }
+        .modal-head h3 { color: var(--accent); font-size: 15px; }
+        .modal-head button { margin-left: auto; background: none; color: var(--muted); border: 0; font-size: 26px; cursor: pointer; }
+        .modal-body { flex: 1; padding: 18px; overflow: auto; text-align: center; }
+        .split { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        .progress .step { color: var(--muted); font-size: 12px; margin: 6px 0; }
+        .progress .step.done { color: var(--green); }
+        @media (max-width: 1100px) {
+            .grid-layout { grid-template-columns: 1fr; }
+            .sidebar { width: 280px; flex-basis: 280px; }
+            .split { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar">
+    <div class="logo">PaveVision</div>
+    <div class="tabs">
+        <button class="tab active" data-tab="map">Route map</button>
+        <button class="tab" data-tab="assessment">Quality assessment</button>
+        <button class="tab" data-tab="prediction">Performance prediction</button>
+    </div>
+    <div class="nav-note">Open-source demo | pavement distress only | restricted trained weights</div>
+</nav>
+
+<section id="page-map" class="page active" style="flex-direction:column;">
+    <div class="map-wrap">
+        <div id="map"></div>
+        <div class="legend">
+            <h4>Routes</h4>
+            <div id="route-legend"></div>
+            <h4 style="margin-top:12px;">PQI* grades</h4>
+            <div class="legend-row"><span class="swatch" style="background:#00C853"></span>Excellent (90-100)</div>
+            <div class="legend-row"><span class="swatch" style="background:#64DD17"></span>Good (80-90)</div>
+            <div class="legend-row"><span class="swatch" style="background:#FFD600"></span>Medium (70-80)</div>
+            <div class="legend-row"><span class="swatch" style="background:#FF6D00"></span>Poor (60-70)</div>
+            <div class="legend-row"><span class="swatch" style="background:#D50000"></span>Very poor (0-60)</div>
+        </div>
+    </div>
+    <div class="info-bar">
+        <span>Public sample: 3 routes, 600 m processed grid data</span>
+        <span>Periods: Mar. 2024, Mar. 2025 and Mar. 2026</span>
+        <span id="map-status">Click a route to open pavement quality assessment.</span>
+    </div>
+</section>
+
+<section id="page-assessment" class="page">
+    <aside class="sidebar">
+        <div class="card">
+            <div class="card-title">Route selection</div>
+            <div id="assessment-routes"></div>
+        </div>
+        <div class="card">
+            <div class="card-title">Survey period</div>
+            <select id="period-select"></select>
+        </div>
+        <div class="card">
+            <div class="card-title">Heatmap type</div>
+            <div class="button-row">
+                <button class="btn secondary active" data-heatmap="pqi">PQI*</button>
+                <button class="btn secondary" data-heatmap="pci">PCI deduction</button>
+            </div>
+        </div>
+        <button class="btn full" onclick="loadAssessment()">Load assessment data</button>
+    </aside>
+    <main class="main">
+        <div class="toolbar">
+            <strong>Pavement-only quality assessment</strong>
+            <span id="assessment-status">Select a route and survey period.</span>
+        </div>
+        <div class="content grid-layout">
+            <div>
+                <canvas id="segment-canvas" width="900" height="180"></canvas>
+                <div class="small" id="segment-note" style="margin-top:8px;text-align:center;">Each block is a 20 m maintenance unit. Click a block to inspect the 0.5 m grid.</div>
+            </div>
+            <div>
+                <div class="card">
+                    <div class="card-title">Overall statistics</div>
+                    <div class="metric-grid" id="assessment-metrics"></div>
+                </div>
+                <div class="card">
+                    <div class="card-title">Grade distribution</div>
+                    <div class="chart-sm" id="grade-chart"></div>
+                </div>
+                <div class="card">
+                    <div class="card-title">Distress deduction by unit</div>
+                    <div class="chart-sm" id="pci-chart"></div>
+                </div>
+                <div class="card">
+                    <div class="card-title">Maintenance-unit table</div>
+                    <div class="table-wrap" id="segment-table"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+</section>
+
+<section id="page-prediction" class="page">
+    <aside class="sidebar">
+        <div class="card">
+            <div class="card-title">1. Route</div>
+            <select id="prediction-route"></select>
+        </div>
+        <div class="card">
+            <div class="card-title">2. Traffic loading</div>
+            <table>
+                <thead><tr><th>Vehicle</th><th>AADT</th><th>Ceq</th></tr></thead>
+                <tbody id="traffic-body"></tbody>
+            </table>
+            <button class="btn full" onclick="calculateEsal()">Calculate ESAL</button>
+            <div id="esal-output" class="small" style="margin-top:8px;"></div>
+        </div>
+        <div class="card">
+            <div class="card-title">3. Climate variables</div>
+            <button class="btn full" onclick="loadWeather()">Load climate sample</button>
+            <div id="weather-output" class="small" style="margin-top:8px;"></div>
+        </div>
+        <div class="card">
+            <div class="card-title">4. PG-PDN sample model</div>
+            <div class="small">The public repository ships frontend visualization code, configuration files and processed demo records. Full-route data, trained weights and the restricted prediction pipeline are withheld under data-sharing restrictions.</div>
+        </div>
+        <button class="btn full" style="padding:12px;" onclick="runPrediction()">Run prediction</button>
+        <div id="prediction-progress" class="progress card" style="display:none;">
+            <div class="step">Load t2 quality state</div>
+            <div class="step">Read traffic and climate variables</div>
+            <div class="step">Load PG-PDN demo output</div>
+            <div class="step">Compare with measured t3</div>
+            <div class="step">Render predicted PQI*</div>
+        </div>
+    </aside>
+    <main class="main">
+        <div class="toolbar">
+            <strong>PG-PDN one-step-ahead prediction</strong>
+            <span id="prediction-status">Ready.</span>
+        </div>
+        <div class="content" id="prediction-content">
+            <div class="small" style="text-align:center;margin-top:80px;">Select a route and run prediction to visualize the public sample model.</div>
+        </div>
+    </main>
+</section>
+
+<div id="grid-modal" class="modal">
+    <div class="modal-box">
+        <div class="modal-head">
+            <h3 id="grid-title">0.5 m grid detail</h3>
+            <button onclick="closeGridModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+            <canvas id="grid-canvas" width="980" height="430"></canvas>
+            <div class="small" id="grid-note" style="margin-top:8px;"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+const APP = {
+    config: null,
+    map: null,
+    routeLayers: {},
+    routeId: "route1",
+    periodId: "t3",
+    heatmapType: "pqi",
+    assessment: null,
+    grid: null
+};
+
+document.addEventListener("DOMContentLoaded", async () => {
+    const response = await fetch("/api/config");
+    APP.config = await response.json();
+    initTabs();
+    await initMap();
+    initAssessmentControls();
+    initPredictionControls();
+    loadTraffic();
+    handleDeepLink();
+});
+
+function initTabs() {
+    document.querySelectorAll(".tab").forEach(button => {
+        button.addEventListener("click", () => {
+            document.querySelectorAll(".tab").forEach(b => b.classList.remove("active"));
+            document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+            button.classList.add("active");
+            document.getElementById("page-" + button.dataset.tab).classList.add("active");
+            if (button.dataset.tab === "map" && APP.map) setTimeout(() => APP.map.invalidateSize(), 50);
+        });
+    });
+}
+
+async function initMap() {
+    APP.map = L.map("map").setView(APP.config.map_center, APP.config.map_zoom);
+    L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
+        maxZoom: 19,
+        attribution: "&copy; OpenStreetMap contributors &copy; CARTO"
+    }).addTo(APP.map);
+
+    const legend = document.getElementById("route-legend");
+    const allPoints = [];
+    APP.config.routes.forEach(route => {
+        const gps = APP.config.route_gps[route.id];
+        if (!gps || !gps.points.length) return;
+        gps.points.forEach(p => allPoints.push(p));
+        const line = L.polyline(gps.points, { color: gps.color, weight: 5, opacity: 0.88 }).addTo(APP.map);
+        line.bindPopup(routePopupContent(route, gps, null));
+        line.on("click", async () => {
+            document.getElementById("map-status").textContent = `${route.name}: loading pavement quality summary...`;
+            try {
+                const response = await fetch(`/api/assessment/${route.id}/t3`);
+                const assessment = await response.json();
+                line.bindPopup(routePopupContent(route, gps, assessment));
+                line.openPopup();
+                document.getElementById("map-status").textContent = `${route.name}: t3 quality summary loaded.`;
+            } catch (error) {
+                document.getElementById("map-status").textContent = `${route.name}: quality summary unavailable.`;
+            }
+        });
+        line.bindTooltip(route.name, { direction: "top" });
+        const marker = L.circleMarker(gps.center, { radius: 6, color: gps.color, fillColor: gps.color, fillOpacity: 0.95 }).addTo(APP.map);
+        marker.bindTooltip(route.name, { permanent: true, direction: "right" });
+        APP.routeLayers[route.id] = { line, marker };
+        legend.insertAdjacentHTML("beforeend", `<div class="legend-row"><span class="swatch" style="background:${gps.color}"></span>${route.name}</div>`);
+    });
+    if (allPoints.length) APP.map.fitBounds(L.latLngBounds(allPoints), { padding: [28, 28] });
+}
+
+function routePopupContent(route, gps, assessment) {
+    if (!assessment || !assessment.overall_stats) {
+        return `<b>${route.name}</b><br>${route.description}<br>Length: ${route.length_km} km<br>Click the route to load pavement quality parameters.`;
+    }
+    const stats = assessment.overall_stats;
+    const pqi = stats.PQI_extended || {};
+    const pci = stats.PCI || {};
+    return `<div style="min-width:210px">
+        <b>${route.name}</b><br>
+        <span>${route.description}</span><br>
+        <span>Survey period: ${assessment.period}</span><br>
+        <span>Public sample: ${assessment.public_sample_length_m} m</span><br>
+        <hr style="border:0;border-top:1px solid #d0d7de;margin:6px 0">
+        <span>Mean PQI*: <b>${Number(pqi.mean).toFixed(1)}</b></span><br>
+        <span>Mean PCI deduction: <b>${Number(pci.mean).toFixed(2)}</b></span><br>
+        <span>20 m units: <b>${stats.n_segments}</b></span><br>
+        <span>Grid resolution: <b>0.5 m</b></span><br>
+        <a href="#" onclick="switchToAssessment('${route.id}');return false;">Open assessment</a>
+    </div>`;
+}
+
+function switchToAssessment(routeId) {
+    APP.routeId = routeId;
+    document.querySelector('.tab[data-tab="assessment"]').click();
+    updateRouteCards();
+    loadAssessment();
+}
+
+function handleDeepLink() {
+    const params = new URLSearchParams(window.location.search);
+    const view = params.get("view");
+    const route = params.get("route");
+    const period = params.get("period");
+    if (route && APP.config.routes.some(r => r.id === route)) APP.routeId = route;
+    if (period && APP.config.periods.some(p => p.id === period)) {
+        APP.periodId = period;
+        document.getElementById("period-select").value = period;
+    }
+    updateRouteCards();
+    if (view === "assessment") {
+        document.querySelector('.tab[data-tab="assessment"]').click();
+        loadAssessment();
+    }
+    if (view === "prediction") {
+        document.querySelector('.tab[data-tab="prediction"]').click();
+        if (route) document.getElementById("prediction-route").value = route;
+        setTimeout(runPrediction, 250);
+    }
+}
+
+function initAssessmentControls() {
+    const routeBox = document.getElementById("assessment-routes");
+    APP.config.routes.forEach(route => {
+        const card = document.createElement("div");
+        card.className = "route-card";
+        card.dataset.route = route.id;
+        card.innerHTML = `<div class="route-name" style="color:${route.display_color}">${route.name}</div>
+            <div class="route-desc">${route.description}</div>
+            <div class="route-desc">Length: ${route.length_km} km | Public sample: 200 m</div>`;
+        card.onclick = () => { APP.routeId = route.id; updateRouteCards(); };
+        routeBox.appendChild(card);
+    });
+    const period = document.getElementById("period-select");
+    APP.config.periods.forEach(p => period.insertAdjacentHTML("beforeend", `<option value="${p.id}" ${p.id === APP.periodId ? "selected" : ""}>${p.label}</option>`));
+    period.onchange = e => { APP.periodId = e.target.value; };
+    document.querySelectorAll("[data-heatmap]").forEach(button => {
+        button.onclick = () => {
+            document.querySelectorAll("[data-heatmap]").forEach(b => b.classList.remove("active"));
+            button.classList.add("active");
+            APP.heatmapType = button.dataset.heatmap;
+            if (APP.assessment) renderAssessment();
+        };
+    });
+    updateRouteCards();
+}
+
+function updateRouteCards() {
+    document.querySelectorAll(".route-card").forEach(card => card.classList.toggle("active", card.dataset.route === APP.routeId));
+}
+
+async function loadAssessment() {
+    const status = document.getElementById("assessment-status");
+    status.textContent = "Loading...";
+    try {
+        const [assessmentResp, gridResp] = await Promise.all([
+            fetch(`/api/assessment/${APP.routeId}/${APP.periodId}`),
+            fetch(`/api/grid/${APP.routeId}/${APP.periodId}?grid_size=0.5`)
+        ]);
+        APP.assessment = await assessmentResp.json();
+        APP.grid = await gridResp.json();
+        if (APP.assessment.error) throw new Error(APP.assessment.error);
+        if (APP.grid.error) throw new Error(APP.grid.error);
+        renderAssessment();
+        const route = APP.config.routes.find(r => r.id === APP.routeId);
+        const period = APP.config.periods.find(p => p.id === APP.periodId);
+        status.textContent = `${route.name} | ${period.label} | ${APP.assessment.segment_scores.length} units`;
+    } catch (error) {
+        status.textContent = "Load failed: " + error.message;
+    }
+}
+
+function gradeColor(score) {
+    const colors = APP.config.grade_colors;
+    if (score >= 90) return colors["Excellent"];
+    if (score >= 80) return colors["Good"];
+    if (score >= 70) return colors["Medium"];
+    if (score >= 60) return colors["Poor"];
+    return colors["Very poor"];
+}
+
+function pqiColor(score) {
+    if (score >= 90) return [0, 200, 83];
+    if (score >= 80) return [100, 221, 23];
+    if (score >= 70) return [255, 214, 0];
+    if (score >= 60) return [255, 109, 0];
+    return [213, 0, 0];
+}
+
+function deductionColor(value) {
+    const t = Math.min(Math.max(value, 0) / 40, 1);
+    return [Math.round(0 + 213 * t), Math.round(200 - 200 * t), Math.round(83 - 83 * t)];
+}
+
+function rgb(color) { return `rgb(${color[0]},${color[1]},${color[2]})`; }
+
+function renderAssessment() {
+    renderSegmentStrip();
+    renderAssessmentMetrics();
+    renderGradeChart();
+    renderPciChart();
+    renderSegmentTable();
+}
+
+function renderSegmentStrip() {
+    const canvas = document.getElementById("segment-canvas");
+    const ctx = canvas.getContext("2d");
+    const segments = APP.assessment.segment_scores || [];
+    const width = Math.max(900, segments.length * 58);
+    canvas.width = width;
+    canvas.height = 170;
+    ctx.fillStyle = "#111c28";
+    ctx.fillRect(0, 0, width, canvas.height);
+    const marginLeft = 42;
+    const barHeight = 72;
+    const segW = Math.max(34, Math.floor((width - marginLeft - 20) / Math.max(1, segments.length)));
+    segments.forEach((seg, i) => {
+        const value = APP.heatmapType === "pqi" ? seg.PQI_extended : seg.PCI;
+        const color = APP.heatmapType === "pqi" ? pqiColor(value) : deductionColor(value);
+        const x = marginLeft + i * segW;
+        ctx.fillStyle = rgb(color);
+        ctx.fillRect(x, 28, segW - 2, barHeight);
+        ctx.fillStyle = value > 55 || APP.heatmapType === "pci" ? "#08121c" : "#fff";
+        ctx.font = "12px Arial";
+        ctx.textAlign = "center";
+        ctx.fillText(value.toFixed(1), x + segW / 2 - 1, 68);
+        ctx.fillStyle = "#9aacbd";
+        ctx.font = "11px Arial";
+        ctx.fillText(`${seg.s_start.toFixed(0)}-${seg.s_end.toFixed(0)} m`, x + segW / 2 - 1, 122);
+    });
+    ctx.fillStyle = "#9aacbd";
+    ctx.font = "12px Arial";
+    ctx.textAlign = "center";
+    ctx.fillText(APP.heatmapType === "pqi" ? "PQI* by 20 m maintenance unit" : "PCI distress deduction by 20 m maintenance unit", width / 2, 150);
+    canvas.onclick = event => {
+        const rect = canvas.getBoundingClientRect();
+        const x = event.clientX - rect.left;
+        const idx = Math.floor((x - marginLeft) / segW);
+        if (idx >= 0 && idx < segments.length) showGridDetail(idx);
+    };
+    document.getElementById("segment-note").textContent = APP.heatmapType === "pqi"
+        ? "PQI* ranges from 0 to 100; higher values indicate better pavement condition."
+        : "PCI deduction is computed from pavement distress cells only.";
+}
+
+function renderAssessmentMetrics() {
+    const stats = APP.assessment.overall_stats;
+    document.getElementById("assessment-metrics").innerHTML = `
+        <div class="metric"><div class="metric-value" style="color:${gradeColor(stats.PQI_extended.mean)}">${stats.PQI_extended.mean.toFixed(1)}</div><div class="metric-label">Mean PQI*</div></div>
+        <div class="metric"><div class="metric-value">${stats.PCI.mean.toFixed(2)}</div><div class="metric-label">Mean PCI deduction</div></div>
+        <div class="metric"><div class="metric-value">${stats.n_segments}</div><div class="metric-label">20 m units</div></div>`;
+}
+
+function renderGradeChart() {
+    const chart = echarts.init(document.getElementById("grade-chart"));
+    const dist = APP.assessment.overall_stats.grade_distribution;
+    chart.setOption({
+        tooltip: { trigger: "item" },
+        series: [{
+            type: "pie",
+            radius: ["42%", "72%"],
+            label: { color: "#9aacbd", fontSize: 11 },
+            data: Object.entries(dist).map(([name, value]) => ({ name, value, itemStyle: { color: APP.config.grade_colors[name] } }))
+        }]
+    });
+}
+
+function renderPciChart() {
+    const chart = echarts.init(document.getElementById("pci-chart"));
+    const segments = APP.assessment.segment_scores || [];
+    chart.setOption({
+        tooltip: { trigger: "axis" },
+        grid: { top: 25, bottom: 32, left: 42, right: 10 },
+        xAxis: { type: "category", data: segments.map(s => s.segment_id), axisLabel: { color: "#9aacbd", fontSize: 10 } },
+        yAxis: { type: "value", name: "Deduction", axisLabel: { color: "#9aacbd" }, nameTextStyle: { color: "#9aacbd" }, splitLine: { lineStyle: { color: "#31455c" } } },
+        series: [{ name: "PCI", type: "bar", data: segments.map(s => s.PCI), itemStyle: { color: "#ff6b6b" } }]
+    });
+}
+
+function renderSegmentTable() {
+    const rows = (APP.assessment.segment_scores || []).map(s => `
+        <tr>
+            <td>${s.segment_id}</td>
+            <td>${s.s_start.toFixed(0)}-${s.s_end.toFixed(0)}</td>
+            <td>${s.PCI.toFixed(2)}</td>
+            <td style="color:${gradeColor(s.PQI_extended)};font-weight:700;">${s.PQI_extended.toFixed(1)}</td>
+            <td><span class="badge" style="background:${gradeColor(s.PQI_extended)}">${s.quality_grade}</span></td>
+        </tr>`).join("");
+    document.getElementById("segment-table").innerHTML = `<table><thead><tr><th>#</th><th>s (m)</th><th>PCI</th><th>PQI*</th><th>Grade</th></tr></thead><tbody>${rows}</tbody></table>`;
+}
+
+function showGridDetail(segmentIndex) {
+    const segment = APP.assessment.segment_scores[segmentIndex];
+    const cells = (APP.grid.cells || []).filter(c => c.s >= segment.s_start && c.s < segment.s_end);
+    if (!cells.length) return;
+    document.getElementById("grid-modal").classList.add("active");
+    document.getElementById("grid-title").textContent = `Unit ${segment.segment_id}: s = ${segment.s_start.toFixed(0)}-${segment.s_end.toFixed(0)} m, PQI* = ${segment.PQI_extended.toFixed(1)}`;
+    const sVals = [...new Set(cells.map(c => c.s))].sort((a, b) => a - b);
+    const dVals = [...new Set(cells.map(c => c.d))].sort((a, b) => a - b);
+    const canvas = document.getElementById("grid-canvas");
+    const ctx = canvas.getContext("2d");
+    const cellW = Math.min(16, Math.max(5, Math.floor(880 / sVals.length)));
+    const cellH = Math.min(28, Math.max(8, Math.floor(330 / dVals.length)));
+    canvas.width = sVals.length * cellW + 90;
+    canvas.height = dVals.length * cellH + 72;
+    ctx.fillStyle = "#111c28";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    const cellMap = new Map(cells.map(c => [`${c.s}_${c.d}`, c]));
+    sVals.forEach((s, si) => {
+        dVals.forEach((d, di) => {
+            const cell = cellMap.get(`${s}_${d}`);
+            if (!cell) return;
+            const value = APP.heatmapType === "pqi" ? cell.pqi : cell.pci;
+            const color = APP.heatmapType === "pqi" ? pqiColor(value) : deductionColor(value);
+            ctx.fillStyle = rgb(color);
+            ctx.fillRect(54 + si * cellW, 18 + di * cellH, cellW - 1, cellH - 1);
+        });
+    });
+    ctx.fillStyle = "#9aacbd";
+    ctx.font = "11px Arial";
+    ctx.textAlign = "center";
+    const step = Math.max(1, Math.floor(sVals.length / 6));
+    for (let i = 0; i < sVals.length; i += step) {
+        ctx.fillText(`${sVals[i].toFixed(0)} m`, 54 + i * cellW + cellW / 2, dVals.length * cellH + 42);
+    }
+    ctx.save();
+    ctx.translate(16, dVals.length * cellH / 2 + 20);
+    ctx.rotate(-Math.PI / 2);
+    ctx.fillText("Lateral distance d (m)", 0, 0);
+    ctx.restore();
+    document.getElementById("grid-note").textContent = `${APP.heatmapType.toUpperCase()} heatmap at 0.5 m grid resolution (${sVals.length} by ${dVals.length} cells).`;
+}
+
+function closeGridModal() {
+    document.getElementById("grid-modal").classList.remove("active");
+}
+
+function initPredictionControls() {
+    const select = document.getElementById("prediction-route");
+    APP.config.routes.forEach(route => {
+        select.insertAdjacentHTML("beforeend", `<option value="${route.id}">${route.name} | ${route.description}</option>`);
+    });
+    select.onchange = () => {
+        loadTraffic(select.value);
+        document.getElementById("prediction-status").textContent = "Ready.";
+    };
+}
+
+async function loadTraffic(routeId = document.getElementById("prediction-route").value || APP.routeId) {
+    const response = await fetch(`/api/traffic?route_id=${routeId}`);
+    const data = await response.json();
+    const body = document.getElementById("traffic-body");
+    body.innerHTML = data.vehicle_types.map(v => `<tr><td>${v.type}</td><td><input type="number" value="${v.daily_count}"></td><td>${v.C_eq}</td></tr>`).join("");
+    calculateEsal(data.esal_annual);
+}
+
+function calculateEsal(referenceEsal = null) {
+    let total = 0;
+    document.querySelectorAll("#traffic-body tr").forEach(row => {
+        const count = parseFloat(row.querySelector("input").value) || 0;
+        const ceq = parseFloat(row.cells[2].textContent) || 0;
+        total += count * ceq;
+    });
+    const esal = referenceEsal === null ? total * 365 / 10000 : referenceEsal;
+    document.getElementById("esal-output").innerHTML = `<b style="color:var(--green);">${esal.toFixed(2)} x 10^4 passes/year</b>`;
+}
+
+async function loadWeather() {
+    const response = await fetch("/api/weather");
+    const data = await response.json();
+    document.getElementById("weather-output").innerHTML = `
+        P_t: <b>${data.data.precipitation_mm} mm</b><br>
+        Delta T_t: <b>${data.data.avg_daily_temp_range} deg C</b><br>
+        F_t: <b>${data.data.frost_days} days</b><br>
+        Source: ${data.source}`;
+}
+
+async function runPrediction() {
+    const routeId = document.getElementById("prediction-route").value;
+    const status = document.getElementById("prediction-status");
+    const progress = document.getElementById("prediction-progress");
+    await loadTraffic(routeId);
+    progress.style.display = "block";
+    const steps = [...progress.querySelectorAll(".step")];
+    steps.forEach(s => s.classList.remove("done"));
+    for (const step of steps) {
+        step.classList.add("done");
+        await new Promise(resolve => setTimeout(resolve, 120));
+    }
+    status.textContent = "Loading PG-PDN demo output...";
+    try {
+        const [predictionResp, paramsResp] = await Promise.all([
+            fetch(`/api/prediction/${routeId}`),
+            fetch("/api/model_params")
+        ]);
+        const prediction = await predictionResp.json();
+        const params = await paramsResp.json();
+        if (prediction.error) throw new Error(prediction.error);
+        renderPrediction(prediction, params, routeId);
+        status.textContent = "Prediction completed.";
+    } catch (error) {
+        status.textContent = "Prediction failed: " + error.message;
+        document.getElementById("prediction-content").innerHTML = `<div class="card" style="color:var(--red);">Prediction failed: ${error.message}</div>`;
+    }
+}
+
+function renderPrediction(prediction, params, routeId) {
+    const route = APP.config.routes.find(r => r.id === routeId);
+    const metrics = prediction.metrics;
+    document.getElementById("prediction-content").innerHTML = `
+        <div class="card">
+            <div class="card-title">${route.name} PG-PDN prediction: Mar. 2025 to Mar. 2026</div>
+            <div class="metric-grid" style="grid-template-columns:repeat(4,1fr);">
+                <div class="metric"><div class="metric-value">${metrics.MAE}</div><div class="metric-label">MAE</div></div>
+                <div class="metric"><div class="metric-value">${metrics.RMSE}</div><div class="metric-label">RMSE</div></div>
+                <div class="metric"><div class="metric-value">${metrics.n_segments}</div><div class="metric-label">20 m units</div></div>
+                <div class="metric"><div class="metric-value">0.5 m</div><div class="metric-label">Grid resolution</div></div>
+            </div>
+        </div>
+        <div class="split">
+            <div class="card"><div class="card-title">Measured PQI* in Mar. 2026</div><canvas id="actual-bar" width="520" height="86"></canvas></div>
+            <div class="card"><div class="card-title">Predicted PQI* by PG-PDN</div><canvas id="predicted-bar" width="520" height="86"></canvas></div>
+        </div>
+        <div class="card"><div class="card-title">Prediction residual (predicted - measured)</div><div class="chart" id="residual-chart"></div></div>
+        <div class="split">
+            <div class="card"><div class="card-title">Baseline comparison</div><div class="chart" id="comparison-chart"></div></div>
+            <div class="card"><div class="card-title">Physical and residual branch contribution</div><div class="chart" id="ratio-chart"></div></div>
+        </div>
+        <div class="card"><div class="card-title">Physical parameter view</div><div class="chart" id="params-chart"></div></div>`;
+    drawPredictionStrip("actual-bar", prediction.actual.segment_scores);
+    drawPredictionStrip("predicted-bar", prediction.predicted.segment_scores);
+    renderResidualChart(prediction.residuals);
+    renderComparisonChart(prediction.comparison);
+    renderRatioChart(params);
+    renderParamsChart(params);
+}
+
+function drawPredictionStrip(canvasId, segments) {
+    const canvas = document.getElementById(canvasId);
+    const ctx = canvas.getContext("2d");
+    ctx.fillStyle = "#111c28";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    const segW = Math.max(18, Math.floor((canvas.width - 24) / segments.length));
+    segments.forEach((seg, i) => {
+        const x = 12 + i * segW;
+        ctx.fillStyle = rgb(pqiColor(seg.PQI_extended));
+        ctx.fillRect(x, 12, segW - 2, 52);
+        ctx.fillStyle = seg.PQI_extended > 70 ? "#08121c" : "#fff";
+        ctx.font = "11px Arial";
+        ctx.textAlign = "center";
+        ctx.fillText(seg.PQI_extended.toFixed(1), x + segW / 2 - 1, 44);
+    });
+}
+
+function renderResidualChart(residuals) {
+    const chart = echarts.init(document.getElementById("residual-chart"));
+    chart.setOption({
+        tooltip: { trigger: "axis" },
+        grid: { top: 28, bottom: 35, left: 52, right: 18 },
+        xAxis: { type: "category", name: "20 m unit", data: residuals.map((_, i) => i + 1), axisLabel: { color: "#9aacbd" }, nameTextStyle: { color: "#9aacbd" } },
+        yAxis: { type: "value", name: "PQI points", axisLabel: { color: "#9aacbd" }, nameTextStyle: { color: "#9aacbd" }, splitLine: { lineStyle: { color: "#31455c" } } },
+        series: [{ name: "Residual", type: "line", data: residuals, smooth: false, symbolSize: 7, lineStyle: { color: "#00b4d8", width: 2 }, itemStyle: { color: "#ffd600" } }]
+    });
+}
+
+function renderComparisonChart(comparison) {
+    const methods = Object.keys(comparison);
+    const chart = echarts.init(document.getElementById("comparison-chart"));
+    chart.setOption({
+        tooltip: { trigger: "axis" },
+        legend: { data: ["MAE", "RMSE"], textStyle: { color: "#9aacbd" } },
+        grid: { top: 36, bottom: 34, left: 50, right: 10 },
+        xAxis: { type: "category", data: methods.map(m => m.replace("_", "-")), axisLabel: { color: "#9aacbd" } },
+        yAxis: { type: "value", axisLabel: { color: "#9aacbd" }, splitLine: { lineStyle: { color: "#31455c" } } },
+        series: [
+            { name: "MAE", type: "bar", data: methods.map(m => comparison[m].MAE), itemStyle: { color: "#4ecdc4" } },
+            { name: "RMSE", type: "bar", data: methods.map(m => comparison[m].RMSE), itemStyle: { color: "#45b7d1" } }
+        ]
+    });
+}
+
+function renderRatioChart(params) {
+    const chart = echarts.init(document.getElementById("ratio-chart"));
+    chart.setOption({
+        tooltip: { trigger: "item" },
+        series: [{
+            type: "pie",
+            radius: ["48%", "72%"],
+            label: { color: "#9aacbd" },
+            data: [
+                { name: "Physical branch", value: params.physics_ratio, itemStyle: { color: "#00b4d8" } },
+                { name: "Residual branch", value: params.data_ratio, itemStyle: { color: "#ffd600" } }
+            ]
+        }]
+    });
+}
+
+function renderParamsChart(params) {
+    const keys = Object.keys(params.physics_params.initial);
+    const chart = echarts.init(document.getElementById("params-chart"));
+    chart.setOption({
+        tooltip: {},
+        legend: { data: ["Initial", "Public sample"], textStyle: { color: "#9aacbd" } },
+        radar: {
+            indicator: keys.map(k => ({ name: k, max: Math.max(params.physics_params.initial[k], params.physics_params.trained[k], 0.001) * 1.6 })),
+            axisName: { color: "#9aacbd", fontSize: 10 },
+            splitLine: { lineStyle: { color: "#31455c" } },
+            splitArea: { areaStyle: { color: ["rgba(0,180,216,0.03)", "rgba(0,180,216,0.07)"] } }
+        },
+        series: [{
+            type: "radar",
+            data: [
+                { name: "Initial", value: keys.map(k => params.physics_params.initial[k]), areaStyle: { opacity: 0.15 }, itemStyle: { color: "#ff6b6b" } },
+                { name: "Public sample", value: keys.map(k => params.physics_params.trained[k]), areaStyle: { opacity: 0.15 }, itemStyle: { color: "#00c853" } }
+            ]
+        }]
+    });
+}
+
+document.addEventListener("keydown", event => {
+    if (event.key === "Escape") closeGridModal();
+});
+</script>
+</body>
+</html>

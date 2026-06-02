@@ -1,0 +1,124 @@
+﻿{
+    "schema_version":  2,
+    "route_id":  "route2",
+    "scene":  "Urban lane-changing route",
+    "period":  "Mar. 2024",
+    "segment_length":  20.0,
+    "public_sample_length_m":  200.0,
+    "segment_scores":  [
+                           {
+                               "segment_id":  1,
+                               "s_start":  0.0,
+                               "s_end":  20.0,
+                               "cell_count":  557,
+                               "PCI":  1.3476,
+                               "PQI_extended":  98.6524,
+                               "quality_grade":  "Excellent"
+                           },
+                           {
+                               "segment_id":  2,
+                               "s_start":  20.0,
+                               "s_end":  40.0,
+                               "cell_count":  560,
+                               "PCI":  0.8179,
+                               "PQI_extended":  99.1821,
+                               "quality_grade":  "Excellent"
+                           },
+                           {
+                               "segment_id":  3,
+                               "s_start":  40.0,
+                               "s_end":  60.0,
+                               "cell_count":  560,
+                               "PCI":  3.0893,
+                               "PQI_extended":  96.9107,
+                               "quality_grade":  "Excellent"
+                           },
+                           {
+                               "segment_id":  4,
+                               "s_start":  60.0,
+                               "s_end":  80.0,
+                               "cell_count":  560,
+                               "PCI":  2.6562,
+                               "PQI_extended":  97.3438,
+                               "quality_grade":  "Excellent"
+                           },
+                           {
+                               "segment_id":  5,
+                               "s_start":  80.0,
+                               "s_end":  100.0,
+                               "cell_count":  560,
+                               "PCI":  1.1654,
+                               "PQI_extended":  98.8346,
+                               "quality_grade":  "Excellent"
+                           },
+                           {
+                               "segment_id":  6,
+                               "s_start":  100.0,
+                               "s_end":  120.0,
+                               "cell_count":  560,
+                               "PCI":  3.6896,
+                               "PQI_extended":  96.3104,
+                               "quality_grade":  "Excellent"
+                           },
+                           {
+                               "segment_id":  7,
+                               "s_start":  120.0,
+                               "s_end":  140.0,
+                               "cell_count":  560,
+                               "PCI":  2.3287,
+                               "PQI_extended":  97.6713,
+                               "quality_grade":  "Excellent"
+                           },
+                           {
+                               "segment_id":  8,
+                               "s_start":  140.0,
+                               "s_end":  160.0,
+                               "cell_count":  560,
+                               "PCI":  4.0155,
+                               "PQI_extended":  95.9845,
+                               "quality_grade":  "Excellent"
+                           },
+                           {
+                               "segment_id":  9,
+                               "s_start":  160.0,
+                               "s_end":  180.0,
+                               "cell_count":  560,
+                               "PCI":  0.7993,
+                               "PQI_extended":  99.2007,
+                               "quality_grade":  "Excellent"
+                           },
+                           {
+                               "segment_id":  10,
+                               "s_start":  180.0,
+                               "s_end":  200.0,
+                               "cell_count":  560,
+                               "PCI":  2.4723,
+                               "PQI_extended":  97.5277,
+                               "quality_grade":  "Excellent"
+                           }
+                       ],
+    "overall_stats":  {
+                          "PQI_extended":  {
+                                               "mean":  97.7618,
+                                               "min":  95.9845,
+                                               "max":  99.2007,
+                                               "std":  1.1072
+                                           },
+                          "PCI":  {
+                                      "mean":  2.2382,
+                                      "min":  0.7993,
+                                      "max":  4.0155,
+                                      "std":  1.1072
+                                  },
+                          "grade_distribution":  {
+                                                     "Excellent":  10,
+                                                     "Good":  0,
+                                                     "Medium":  0,
+                                                     "Poor":  0,
+                                                     "Very poor":  0
+                                                 },
+                          "n_segments":  10,
+                          "pavement_only":  true
+                      },
+    "method_note":  "Pavement-only quality assessment based on distress grid cells."
+}
