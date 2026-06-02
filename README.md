@@ -8,6 +8,12 @@ The package is designed for method inspection and software reuse. It exposes the
 
 PaveVision is an English-language pavement quality assessment and performance-prediction interface built around semantic distress maps and grid-level PG-PDN inference. The screenshots below illustrate the public demonstration workflow and visual layout; they are provided as interface previews rather than additional experimental evidence.
 
+### Route Map and Quality Popup
+
+The route-map view provides the first entry point for pavement engineers. Clicking a route opens a quality summary popup with the survey period, public sample length, mean PQI*, distress deduction, number of 20 m maintenance units and 0.5 m grid resolution.
+
+![PaveVision route map with pavement quality popup](assets/web_route_map_popup.png)
+
 ### Pavement Quality Assessment
 
 ![PaveVision pavement quality assessment module](assets/web_quality_module.png)
@@ -15,6 +21,30 @@ PaveVision is an English-language pavement quality assessment and performance-pr
 ### Performance Prediction
 
 ![PaveVision performance prediction module](assets/web_prediction_module.png)
+
+### 0.5 m Grid-Level Prediction Examples
+
+The examples below show the fine-resolution grid-level quality and prediction outputs used for visual inspection. They are included to demonstrate how the method preserves local pavement-quality variation before aggregation to 20 m maintenance units.
+
+#### LSTM
+
+![Route 1 grid-level LSTM result](assets/grid_route1_lstm.png)
+
+#### XGBoost
+
+![Route 1 grid-level XGBoost result](assets/grid_route1_xgboost.png)
+
+#### GRU
+
+![Route 1 grid-level GRU result](assets/grid_route1_gru.png)
+
+#### PG-PDN
+
+![Route 1 grid-level PG-PDN result](assets/grid_route1_pgpdn.png)
+
+#### PG-PDN Prediction Error
+
+![Route 1 grid-level PG-PDN prediction error](assets/grid_route1_pgpdn_error.png)
 
 ## What Is Included
 
