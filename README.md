@@ -22,29 +22,35 @@ The route-map view provides the first entry point for pavement engineers. Clicki
 
 ![PaveVision performance prediction module](assets/web_prediction_module.png)
 
-### 0.5 m Grid-Level Prediction Examples
+### PG-PDN Network Architecture
 
-The examples below show the fine-resolution grid-level quality and prediction outputs used for visual inspection. They are included to demonstrate how the method preserves local pavement-quality variation before aggregation to 20 m maintenance units.
+The PG-PDN architecture combines an interpretable physical degradation branch with a GRU residual correction branch. This public package keeps the model interface, feature schema, loss terms and visualization workflow consistent with the manuscript, while withholding full survey data and trained full-data weights.
 
-#### LSTM
+![PG-PDN network architecture](assets/pgpdn_architecture.png)
 
-![Route 1 grid-level LSTM result](assets/grid_route1_lstm.png)
+### Historical Measurements and PG-PDN Prediction at 0.5 m Resolution
 
-#### XGBoost
+The fig10 series visualizes Route 3 at 0.5 m grid resolution: March 2024 measured quality, March 2025 measured quality, March 2026 PG-PDN prediction, March 2026 measured quality and the prediction residual. These images illustrate measured-to-predicted spatial continuity rather than a comparison among different learning algorithms.
 
-![Route 1 grid-level XGBoost result](assets/grid_route1_xgboost.png)
+#### March 2024 Measured
 
-#### GRU
+![Route 3 March 2024 measured grid-level PQI*](assets/fig10a_route3_2024_measured.png)
 
-![Route 1 grid-level GRU result](assets/grid_route1_gru.png)
+#### March 2025 Measured
 
-#### PG-PDN
+![Route 3 March 2025 measured grid-level PQI*](assets/fig10b_route3_2025_measured.png)
 
-![Route 1 grid-level PG-PDN result](assets/grid_route1_pgpdn.png)
+#### March 2026 Predicted
 
-#### PG-PDN Prediction Error
+![Route 3 March 2026 PG-PDN predicted grid-level PQI*](assets/fig10c_route3_2026_predicted.png)
 
-![Route 1 grid-level PG-PDN prediction error](assets/grid_route1_pgpdn_error.png)
+#### March 2026 Measured
+
+![Route 3 March 2026 measured grid-level PQI*](assets/fig10d_route3_2026_measured.png)
+
+#### Prediction Residual
+
+![Route 3 grid-level PG-PDN prediction residual](assets/fig10e_route3_prediction_residual.png)
 
 ## What Is Included
 
