@@ -18,5 +18,6 @@ checkpoints/
 *.jpg
 *.jpeg
 *.png
+!assets/
+!assets/*.png
 !outputs/.gitkeep
-
