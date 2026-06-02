@@ -1,0 +1,33 @@
+model:
+  name: PG-PDN
+  input_dim: 12
+  residual_input_dim: 8
+  gru_hidden_dim: 16
+  gru_layers: 1
+  dropout: 0.1
+  pqi_scale: 100.0
+
+physical_branch:
+  parameter_clip_ratio: 0.5
+  initial_parameters:
+    alpha0: 0.008
+    alpha1: 0.012
+    alpha2: 0.00020
+    alpha3: 0.0010
+    alpha4: 0.0030
+    beta1: 0.0050
+    beta2: 0.0040
+    beta3: 0.0120
+    beta4: 0.0150
+    gamma: 0.0100
+
+loss:
+  lambda_neg: 0.5
+  lambda_smooth: 0.1
+
+release_policy:
+  includes_trained_weights: false
+  includes_raw_point_clouds: false
+  includes_full_route_feature_tables: false
+  includes_synthetic_demo_records: true
+
