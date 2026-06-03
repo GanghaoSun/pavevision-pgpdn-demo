@@ -10,6 +10,8 @@ The public code follows the 12-dimensional feature vector used in the manuscript
 
 The first component is the current grid-level quality index. ESAL is expressed in units of 10^4. Precipitation, temperature range and low-temperature days retain their engineering units in the physical branch. Distress densities and LiDAR intensity features are grid-level variables in [0, 1].
 
+In the Python feature schema this index is named `pqi_star`. In the processed web-demo JSON files (`web_demo/data/`) the same index appears under the field name `PQI_extended`; both denote the manuscript PQI* index, defined as PQI* = 100 - PCI.
+
 ## S2. PG-PDN Architecture
 
 PG-PDN contains two branches:

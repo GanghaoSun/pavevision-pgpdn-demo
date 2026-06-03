@@ -7,7 +7,7 @@ Outputs:
     Predicted deterioration in normalized PQI* units and in PQI* points.
 
 Chapter:
-    Manuscript Section 3.5, Physics-guided pavement degradation prediction network.
+    Manuscript subsection: Physics-guided pavement degradation prediction network.
 
 Notes:
     This file provides architecture code only. No trained weights from the

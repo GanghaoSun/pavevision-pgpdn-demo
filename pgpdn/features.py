@@ -7,7 +7,7 @@ Outputs:
     Pandas DataFrames or NumPy arrays ready for PG-PDN inference.
 
 Chapter:
-    Manuscript Section 3.5, PG-PDN feature vector design.
+    Manuscript subsection: Prediction task and feature vector (PG-PDN).
 """
 
 from __future__ import annotations

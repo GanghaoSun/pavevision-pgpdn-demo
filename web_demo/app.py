@@ -68,6 +68,7 @@ GRADE_COLORS = {
 TRAFFIC_BY_ROUTE = {
     "route1": {
         "esal_annual": 0.78,
+        "eta_s": 0.35,
         "vehicle_types": [
             {"type": "Passenger car", "daily_count": 820, "C_eq": 0.0003, "note": "Passenger car <=2 t"},
             {"type": "Medium passenger car", "daily_count": 25, "C_eq": 0.105, "note": "2-5 t"},
@@ -79,6 +80,7 @@ TRAFFIC_BY_ROUTE = {
     },
     "route2": {
         "esal_annual": 1.26,
+        "eta_s": 0.40,
         "vehicle_types": [
             {"type": "Passenger car", "daily_count": 3520, "C_eq": 0.0003, "note": "Passenger car <=2 t"},
             {"type": "Medium passenger car", "daily_count": 85, "C_eq": 0.105, "note": "2-5 t"},
@@ -90,6 +92,7 @@ TRAFFIC_BY_ROUTE = {
     },
     "route3": {
         "esal_annual": 11.34,
+        "eta_s": 0.40,
         "vehicle_types": [
             {"type": "Passenger car", "daily_count": 605, "C_eq": 0.0003, "note": "Passenger car <=2 t"},
             {"type": "Medium passenger car", "daily_count": 15, "C_eq": 0.105, "note": "2-5 t"},
@@ -101,35 +104,33 @@ TRAFFIC_BY_ROUTE = {
     },
 }
 
-BASELINE_COMPARISON = {
-    "route1": {
-        "HDM4": {"MAE": 2.15, "RMSE": 3.64},
-        "XGBoost": {"MAE": 1.19, "RMSE": 2.19},
-        "LSTM": {"MAE": 1.35, "RMSE": 2.35},
-        "GRU": {"MAE": 1.19, "RMSE": 2.12},
-    },
-    "route2": {
-        "HDM4": {"MAE": 1.82, "RMSE": 3.64},
-        "XGBoost": {"MAE": 0.98, "RMSE": 2.19},
-        "LSTM": {"MAE": 1.08, "RMSE": 2.35},
-        "GRU": {"MAE": 0.96, "RMSE": 2.12},
-    },
-    "route3": {
-        "HDM4": {"MAE": 3.68, "RMSE": 3.64},
-        "XGBoost": {"MAE": 2.00, "RMSE": 2.19},
-        "LSTM": {"MAE": 2.21, "RMSE": 2.35},
-        "GRU": {"MAE": 1.98, "RMSE": 2.12},
-    },
+# Physical-branch parameters as reported in the manuscript
+# (Table: initial and learned parameters in the physical branch).
+# These 10 interpretable scalars are published in the paper; only the trained
+# GRU residual-branch weights remain withheld under data-sharing restrictions.
+PHYSICAL_PARAMS_INITIAL = {
+    "alpha0": 0.008,
+    "alpha1": 0.012,
+    "alpha2": 0.00020,
+    "alpha3": 0.0010,
+    "alpha4": 0.0030,
+    "beta1": 0.0050,
+    "beta2": 0.0040,
+    "beta3": 0.0120,
+    "beta4": 0.0150,
+    "gamma": 0.0100,
 }
-
-PHYSICAL_PARAMS = {
-    "alpha0": 0.0008,
-    "alpha1": 0.0012,
-    "alpha2": 0.0000008,
-    "alpha3": 0.00005,
-    "alpha4": 0.000008,
-    "beta_pci": 0.0015,
-    "gamma_age": 0.0010,
+PHYSICAL_PARAMS_LEARNED = {
+    "alpha0": 0.010,
+    "alpha1": 0.015,
+    "alpha2": 0.00018,
+    "alpha3": 0.0012,
+    "alpha4": 0.0038,
+    "beta1": 0.0045,
+    "beta2": 0.0035,
+    "beta3": 0.0160,
+    "beta4": 0.0180,
+    "gamma": 0.0110,
 }
 
 app = Flask(__name__, static_folder="static")
@@ -254,8 +255,6 @@ def get_prediction(route_id: str):
         for i in range(min(len(actual_segments), len(predicted_segments)))
     ]
     model_metrics = _metrics(actual_segments, predicted_segments)
-    comparison = dict(BASELINE_COMPARISON.get(route_id, {}))
-    comparison["PG_PDN"] = model_metrics
     return _json_response(
         {
             "actual": actual,
@@ -263,7 +262,6 @@ def get_prediction(route_id: str):
             "baseline": baseline,
             "residuals": residuals,
             "metrics": model_metrics,
-            "comparison": comparison,
             "model": {
                 "name": "PG-PDN precomputed public demo output",
                 "release_policy": "Full-route survey data and trained full-data weights are withheld.",
@@ -293,6 +291,7 @@ def get_traffic():
             "route_id": route_id,
             "vehicle_types": route_payload["vehicle_types"],
             "esal_annual": route_payload["esal_annual"],
+            "eta_s": route_payload.get("eta_s", 1.0),
             "esal_unit": "10^4 passes/year",
             "source": "Manuscript Table: traffic composition and ESAL estimates",
         }
@@ -309,12 +308,12 @@ def get_weather():
             "data": {
                 "precipitation_mm": 536,
                 "avg_daily_temp_range": 11.8,
-                "frost_days": 148,
+                "low_temperature_days": 148,
             },
             "description": {
-                "precipitation_mm": "annual precipitation P_t (mm)",
+                "precipitation_mm": "precipitation P_t (mm)",
                 "avg_daily_temp_range": "mean daily temperature range Delta T_t (deg C)",
-                "frost_days": "freeze-thaw days F_t",
+                "low_temperature_days": "low-temperature days F_t (mean daily temperature below 0 deg C)",
             },
         }
     )
@@ -324,7 +323,7 @@ def get_weather():
 def get_model_params():
     return jsonify(
         {
-            "physics_params": {"initial": PHYSICAL_PARAMS, "trained": PHYSICAL_PARAMS},
+            "physics_params": {"initial": PHYSICAL_PARAMS_INITIAL, "trained": PHYSICAL_PARAMS_LEARNED},
             "residual_params": {
                 "type": "GRU residual correction branch",
                 "release": "architecture disclosed; trained full-data weights withheld",

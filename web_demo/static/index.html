@@ -372,6 +372,7 @@ const APP = {
     routeId: "route1",
     periodId: "t3",
     heatmapType: "pqi",
+    etaS: 1.0,
     assessment: null,
     grid: null
 };
@@ -717,6 +718,7 @@ async function loadTraffic(routeId = document.getElementById("prediction-route")
     const data = await response.json();
     const body = document.getElementById("traffic-body");
     body.innerHTML = data.vehicle_types.map(v => `<tr><td>${v.type}</td><td><input type="number" value="${v.daily_count}"></td><td>${v.C_eq}</td></tr>`).join("");
+    APP.etaS = data.eta_s || 1.0;
     calculateEsal(data.esal_annual);
 }
 
@@ -727,8 +729,9 @@ function calculateEsal(referenceEsal = null) {
         const ceq = parseFloat(row.cells[2].textContent) || 0;
         total += count * ceq;
     });
-    const esal = referenceEsal === null ? total * 365 / 10000 : referenceEsal;
-    document.getElementById("esal-output").innerHTML = `<b style="color:var(--green);">${esal.toFixed(2)} x 10^4 passes/year</b>`;
+    const eta = APP.etaS || 1.0;
+    const esal = referenceEsal === null ? total * 365 * eta / 10000 : referenceEsal;
+    document.getElementById("esal-output").innerHTML = `<b style="color:var(--green);">${esal.toFixed(2)} x 10^4 passes/year</b><br><span style="color:var(--muted);">lane distribution coefficient eta_s = ${eta}</span>`;
 }
 
 async function loadWeather() {
@@ -737,7 +740,7 @@ async function loadWeather() {
     document.getElementById("weather-output").innerHTML = `
         P_t: <b>${data.data.precipitation_mm} mm</b><br>
         Delta T_t: <b>${data.data.avg_daily_temp_range} deg C</b><br>
-        F_t: <b>${data.data.frost_days} days</b><br>
+        F_t: <b>${data.data.low_temperature_days} days</b><br>
         Source: ${data.source}`;
 }
 
@@ -789,14 +792,12 @@ function renderPrediction(prediction, params, routeId) {
         </div>
         <div class="card"><div class="card-title">Prediction residual (predicted - measured)</div><div class="chart" id="residual-chart"></div></div>
         <div class="split">
-            <div class="card"><div class="card-title">Baseline comparison</div><div class="chart" id="comparison-chart"></div></div>
             <div class="card"><div class="card-title">Physical and residual branch contribution</div><div class="chart" id="ratio-chart"></div></div>
-        </div>
-        <div class="card"><div class="card-title">Physical parameter view</div><div class="chart" id="params-chart"></div></div>`;
+            <div class="card"><div class="card-title">Physical parameter view (manuscript)</div><div class="chart" id="params-chart"></div></div>
+        </div>`;
     drawPredictionStrip("actual-bar", prediction.actual.segment_scores);
     drawPredictionStrip("predicted-bar", prediction.predicted.segment_scores);
     renderResidualChart(prediction.residuals);
-    renderComparisonChart(prediction.comparison);
     renderRatioChart(params);
     renderParamsChart(params);
 }
@@ -829,22 +830,6 @@ function renderResidualChart(residuals) {
     });
 }
 
-function renderComparisonChart(comparison) {
-    const methods = Object.keys(comparison);
-    const chart = echarts.init(document.getElementById("comparison-chart"));
-    chart.setOption({
-        tooltip: { trigger: "axis" },
-        legend: { data: ["MAE", "RMSE"], textStyle: { color: "#9aacbd" } },
-        grid: { top: 36, bottom: 34, left: 50, right: 10 },
-        xAxis: { type: "category", data: methods.map(m => m.replace("_", "-")), axisLabel: { color: "#9aacbd" } },
-        yAxis: { type: "value", axisLabel: { color: "#9aacbd" }, splitLine: { lineStyle: { color: "#31455c" } } },
-        series: [
-            { name: "MAE", type: "bar", data: methods.map(m => comparison[m].MAE), itemStyle: { color: "#4ecdc4" } },
-            { name: "RMSE", type: "bar", data: methods.map(m => comparison[m].RMSE), itemStyle: { color: "#45b7d1" } }
-        ]
-    });
-}
-
 function renderRatioChart(params) {
     const chart = echarts.init(document.getElementById("ratio-chart"));
     chart.setOption({
@@ -866,7 +851,7 @@ function renderParamsChart(params) {
     const chart = echarts.init(document.getElementById("params-chart"));
     chart.setOption({
         tooltip: {},
-        legend: { data: ["Initial", "Public sample"], textStyle: { color: "#9aacbd" } },
+        legend: { data: ["Initial", "Learned"], textStyle: { color: "#9aacbd" } },
         radar: {
             indicator: keys.map(k => ({ name: k, max: Math.max(params.physics_params.initial[k], params.physics_params.trained[k], 0.001) * 1.6 })),
             axisName: { color: "#9aacbd", fontSize: 10 },
@@ -877,7 +862,7 @@ function renderParamsChart(params) {
             type: "radar",
             data: [
                 { name: "Initial", value: keys.map(k => params.physics_params.initial[k]), areaStyle: { opacity: 0.15 }, itemStyle: { color: "#ff6b6b" } },
-                { name: "Public sample", value: keys.map(k => params.physics_params.trained[k]), areaStyle: { opacity: 0.15 }, itemStyle: { color: "#00c853" } }
+                { name: "Learned", value: keys.map(k => params.physics_params.trained[k]), areaStyle: { opacity: 0.15 }, itemStyle: { color: "#00c853" } }
             ]
         }]
     });

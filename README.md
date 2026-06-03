@@ -6,7 +6,7 @@ The package is designed for method inspection, frontend visualization and softwa
 
 ## PaveVision Interface Preview
 
-PaveVision is a pavement quality assessment and performance-prediction interface built around semantic distress maps and grid-level PG-PDN outputs. The screenshots below are captured from the local PaveVision system under `web系统开发`; the public repository provides the same frontend layout in `web_demo/` and serves precomputed demo outputs rather than executing the restricted prediction pipeline.
+PaveVision is a pavement quality assessment and performance-prediction interface built around semantic distress maps and grid-level PG-PDN outputs. The screenshots below are captured from the local PaveVision system; the public repository provides the same frontend layout in `web_demo/` and serves precomputed demo outputs rather than executing the restricted prediction pipeline.
 
 ### Route Map and Quality Popup
 
