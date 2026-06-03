@@ -177,7 +177,7 @@
         .metric-value { color: var(--accent); font-size: 24px; font-weight: 800; }
         .metric-label { color: var(--muted); font-size: 11px; margin-top: 4px; }
         canvas { max-width: 100%; background: #111c28; border: 1px solid var(--border); border-radius: 8px; }
-        .chart { width: 100%; height: 240px; }
+        .chart { width: 100%; height: 180px; }
         .chart-sm { width: 100%; height: 210px; }
         .table-wrap { max-height: 300px; overflow-y: auto; }
         table { width: 100%; border-collapse: collapse; font-size: 12px; }
@@ -261,6 +261,7 @@
         <div class="card">
             <div class="card-title">Route selection</div>
             <div id="assessment-routes"></div>
+            <button id="route-toggle" class="btn secondary full" style="display:none;margin-top:8px;" onclick="toggleRouteList()"></button>
         </div>
         <div class="card">
             <div class="card-title">Survey period</div>
@@ -274,6 +275,14 @@
             </div>
         </div>
         <button class="btn full" onclick="loadAssessment()">Load assessment data</button>
+        <div class="card" id="selection-summary" style="margin-top:12px;">
+            <div class="card-title">Current selection</div>
+            <div class="small" id="selection-summary-body">Load a route to see its summary.</div>
+        </div>
+        <div class="card">
+            <div class="card-title">Quality grade scale (PQI*)</div>
+            <div id="grade-scale"></div>
+        </div>
     </aside>
     <main class="main">
         <div class="toolbar">
@@ -284,6 +293,12 @@
             <div>
                 <canvas id="segment-canvas" width="900" height="180"></canvas>
                 <div class="small" id="segment-note" style="margin-top:8px;text-align:center;">Each block is a 20 m maintenance unit. Click a block to inspect the 0.5 m grid.</div>
+                <div class="card" id="grid-detail-card" style="margin-top:12px;">
+                    <div class="card-title" id="grid-title">0.5 m grid detail</div>
+                    <canvas id="grid-canvas" width="900" height="90" style="height:auto;"></canvas>
+                    <div id="grid-colorbar" style="margin-top:8px;"></div>
+                    <div class="small" id="grid-note" style="margin-top:8px;">Click a 20 m unit above to inspect its 0.5 m grid heatmap.</div>
+                </div>
             </div>
             <div>
                 <div class="card">
@@ -351,18 +366,6 @@
     </main>
 </section>
 
-<div id="grid-modal" class="modal">
-    <div class="modal-box">
-        <div class="modal-head">
-            <h3 id="grid-title">0.5 m grid detail</h3>
-            <button onclick="closeGridModal()">&times;</button>
-        </div>
-        <div class="modal-body">
-            <canvas id="grid-canvas" width="980" height="430"></canvas>
-            <div class="small" id="grid-note" style="margin-top:8px;"></div>
-        </div>
-    </div>
-</div>
 
 <script>
 const APP = {
@@ -373,6 +376,8 @@ const APP = {
     periodId: "t3",
     heatmapType: "pqi",
     etaS: 1.0,
+    gridUnitIdx: null,
+    routesExpanded: false,
     assessment: null,
     grid: null
 };
@@ -488,16 +493,19 @@ function handleDeepLink() {
 
 function initAssessmentControls() {
     const routeBox = document.getElementById("assessment-routes");
-    APP.config.routes.forEach(route => {
+    APP.config.routes.forEach((route, i) => {
         const card = document.createElement("div");
         card.className = "route-card";
         card.dataset.route = route.id;
+        card.dataset.index = i;
         card.innerHTML = `<div class="route-name" style="color:${route.display_color}">${route.name}</div>
             <div class="route-desc">${route.description}</div>
             <div class="route-desc">Length: ${route.length_km} km | Public sample: 200 m</div>`;
         card.onclick = () => { APP.routeId = route.id; updateRouteCards(); };
         routeBox.appendChild(card);
     });
+    renderGradeScale();
+    applyRouteVisibility();
     const period = document.getElementById("period-select");
     APP.config.periods.forEach(p => period.insertAdjacentHTML("beforeend", `<option value="${p.id}" ${p.id === APP.periodId ? "selected" : ""}>${p.label}</option>`));
     period.onchange = e => { APP.periodId = e.target.value; };
@@ -516,6 +524,80 @@ function updateRouteCards() {
     document.querySelectorAll(".route-card").forEach(card => card.classList.toggle("active", card.dataset.route === APP.routeId));
 }
 
+function applyRouteVisibility() {
+    const ROUTE_LIMIT = 3;
+    const cards = document.querySelectorAll("#assessment-routes .route-card");
+    const toggle = document.getElementById("route-toggle");
+    cards.forEach((card, i) => {
+        card.style.display = (APP.routesExpanded || i < ROUTE_LIMIT) ? "" : "none";
+    });
+    if (cards.length > ROUTE_LIMIT) {
+        toggle.style.display = "";
+        toggle.textContent = APP.routesExpanded ? "Show less" : `Show all (${cards.length})`;
+    } else {
+        toggle.style.display = "none";
+    }
+}
+
+function toggleRouteList() {
+    APP.routesExpanded = !APP.routesExpanded;
+    applyRouteVisibility();
+}
+
+function renderGradeScale() {
+    const order = ["Excellent", "Good", "Medium", "Poor", "Very poor"];
+    const colors = APP.config.grade_colors || {};
+    const ranges = APP.config.quality_grades || {};
+    document.getElementById("grade-scale").innerHTML = order.map(g => {
+        const r = ranges[g];
+        const rng = r ? `${r[0]}–${r[1]}` : "";
+        return `<div style="display:flex;align-items:center;gap:8px;margin:5px 0;font-size:12px;">
+            <span style="width:22px;height:12px;border-radius:3px;flex:none;background:${colors[g] || '#888'};"></span>
+            <span style="flex:1;color:var(--text);">${g}</span>
+            <span style="color:var(--muted);">${rng}</span></div>`;
+    }).join("");
+}
+
+function renderSelectionSummary() {
+    if (!APP.assessment) return;
+    const route = APP.config.routes.find(r => r.id === APP.routeId);
+    const period = APP.config.periods.find(p => p.id === APP.periodId);
+    const stats = APP.assessment.overall_stats;
+    const mean = stats.PQI_extended.mean;
+    const dist = stats.grade_distribution || {};
+    let domGrade = "-", domVal = -1;
+    Object.entries(dist).forEach(([g, v]) => { if (v > domVal) { domVal = v; domGrade = g; } });
+    document.getElementById("selection-summary-body").innerHTML = `
+        <div style="margin:3px 0;"><b style="color:${route.display_color}">${route.name}</b> &middot; ${route.description}</div>
+        <div style="margin:3px 0;color:var(--muted);">Period: ${period.label}</div>
+        <div style="margin:3px 0;color:var(--muted);">Length: ${route.length_km} km &middot; ${stats.n_segments} &times; 20 m units</div>
+        <div style="margin:3px 0;">Mean PQI*: <b style="color:${gradeColor(mean)}">${mean.toFixed(1)}</b> &middot; mostly ${domGrade}</div>`;
+}
+
+function renderGridColorbar() {
+    const el = document.getElementById("grid-colorbar");
+    if (!el) return;
+    if (APP.heatmapType === "pqi") {
+        const order = ["Excellent", "Good", "Medium", "Poor", "Very poor"];
+        const colors = APP.config.grade_colors || {};
+        const ranges = APP.config.quality_grades || {};
+        el.innerHTML = `<div class="small" style="color:var(--muted);margin-bottom:3px;">PQI* grade color scale</div>
+            <div style="display:flex;gap:2px;">` +
+            order.map(g => {
+                const r = ranges[g] || [];
+                return `<div style="flex:1;text-align:center;">
+                    <div style="height:14px;border-radius:2px;background:${colors[g] || '#888'};"></div>
+                    <div style="font-size:10px;color:var(--muted);margin-top:2px;">${g}</div>
+                    <div style="font-size:10px;color:var(--muted);">${r.length ? r[0] + '–' + r[1] : ''}</div></div>`;
+            }).join("") + `</div>`;
+    } else {
+        el.innerHTML = `<div class="small" style="color:var(--muted);margin-bottom:3px;">PCI deduction color scale</div>
+            <div style="height:14px;border-radius:3px;background:linear-gradient(to right, rgb(0,200,83), rgb(213,0,0));"></div>
+            <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-top:2px;">
+                <span>0 (no deduction)</span><span>&ge;40 (severe)</span></div>`;
+    }
+}
+
 async function loadAssessment() {
     const status = document.getElementById("assessment-status");
     status.textContent = "Loading...";
@@ -528,6 +610,7 @@ async function loadAssessment() {
         APP.grid = await gridResp.json();
         if (APP.assessment.error) throw new Error(APP.assessment.error);
         if (APP.grid.error) throw new Error(APP.grid.error);
+        resetGridDetail();
         renderAssessment();
         const route = APP.config.routes.find(r => r.id === APP.routeId);
         const period = APP.config.periods.find(p => p.id === APP.periodId);
@@ -567,13 +650,16 @@ function renderAssessment() {
     renderGradeChart();
     renderPciChart();
     renderSegmentTable();
+    renderSelectionSummary();
+    if (APP.gridUnitIdx != null && APP.assessment.segment_scores[APP.gridUnitIdx]) showGridDetail(APP.gridUnitIdx);
 }
 
 function renderSegmentStrip() {
     const canvas = document.getElementById("segment-canvas");
     const ctx = canvas.getContext("2d");
     const segments = APP.assessment.segment_scores || [];
-    const width = Math.max(900, segments.length * 58);
+    const containerWidth = (canvas.parentElement && canvas.parentElement.clientWidth) || 900;
+    const width = Math.max(containerWidth, segments.length * 58);
     canvas.width = width;
     canvas.height = 170;
     ctx.fillStyle = "#111c28";
@@ -587,6 +673,11 @@ function renderSegmentStrip() {
         const x = marginLeft + i * segW;
         ctx.fillStyle = rgb(color);
         ctx.fillRect(x, 28, segW - 2, barHeight);
+        if (i === APP.gridUnitIdx) {
+            ctx.strokeStyle = "#00e5ff";
+            ctx.lineWidth = 3;
+            ctx.strokeRect(x - 1, 25, segW, barHeight + 6);
+        }
         ctx.fillStyle = value > 55 || APP.heatmapType === "pci" ? "#08121c" : "#fff";
         ctx.font = "12px Arial";
         ctx.textAlign = "center";
@@ -601,13 +692,14 @@ function renderSegmentStrip() {
     ctx.fillText(APP.heatmapType === "pqi" ? "PQI* by 20 m maintenance unit" : "PCI distress deduction by 20 m maintenance unit", width / 2, 150);
     canvas.onclick = event => {
         const rect = canvas.getBoundingClientRect();
-        const x = event.clientX - rect.left;
+        const x = (event.clientX - rect.left) * (canvas.width / rect.width);
         const idx = Math.floor((x - marginLeft) / segW);
-        if (idx >= 0 && idx < segments.length) showGridDetail(idx);
+        if (idx >= 0 && idx < segments.length) { showGridDetail(idx); renderSegmentStrip(); }
     };
     document.getElementById("segment-note").textContent = APP.heatmapType === "pqi"
         ? "PQI* ranges from 0 to 100; higher values indicate better pavement condition."
         : "PCI deduction is computed from pavement distress cells only.";
+    renderGridColorbar();
 }
 
 function renderAssessmentMetrics() {
@@ -658,16 +750,17 @@ function renderSegmentTable() {
 
 function showGridDetail(segmentIndex) {
     const segment = APP.assessment.segment_scores[segmentIndex];
+    if (!segment) return;
     const cells = (APP.grid.cells || []).filter(c => c.s >= segment.s_start && c.s < segment.s_end);
     if (!cells.length) return;
-    document.getElementById("grid-modal").classList.add("active");
+    APP.gridUnitIdx = segmentIndex;
     document.getElementById("grid-title").textContent = `Unit ${segment.segment_id}: s = ${segment.s_start.toFixed(0)}-${segment.s_end.toFixed(0)} m, PQI* = ${segment.PQI_extended.toFixed(1)}`;
     const sVals = [...new Set(cells.map(c => c.s))].sort((a, b) => a - b);
     const dVals = [...new Set(cells.map(c => c.d))].sort((a, b) => a - b);
     const canvas = document.getElementById("grid-canvas");
     const ctx = canvas.getContext("2d");
-    const cellW = Math.min(16, Math.max(5, Math.floor(880 / sVals.length)));
-    const cellH = Math.min(28, Math.max(8, Math.floor(330 / dVals.length)));
+    const cell = Math.max(6, Math.min(20, Math.floor(820 / sVals.length)));
+    const cellW = cell, cellH = cell;
     canvas.width = sVals.length * cellW + 90;
     canvas.height = dVals.length * cellH + 72;
     ctx.fillStyle = "#111c28";
@@ -698,8 +791,15 @@ function showGridDetail(segmentIndex) {
     document.getElementById("grid-note").textContent = `${APP.heatmapType.toUpperCase()} heatmap at 0.5 m grid resolution (${sVals.length} by ${dVals.length} cells).`;
 }
 
-function closeGridModal() {
-    document.getElementById("grid-modal").classList.remove("active");
+function resetGridDetail() {
+    APP.gridUnitIdx = null;
+    const canvas = document.getElementById("grid-canvas");
+    canvas.width = 900;
+    canvas.height = 90;
+    canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
+    document.getElementById("grid-title").textContent = "0.5 m grid detail";
+    document.getElementById("grid-note").textContent = "Click a 20 m unit above to inspect its 0.5 m grid heatmap.";
+    renderGridColorbar();
 }
 
 function initPredictionControls() {
@@ -868,9 +968,16 @@ function renderParamsChart(params) {
     });
 }
 
-document.addEventListener("keydown", event => {
-    if (event.key === "Escape") closeGridModal();
-});
+function resizeAllCharts() {
+    ["grade-chart", "pci-chart", "residual-chart", "ratio-chart", "params-chart"].forEach(id => {
+        const dom = document.getElementById(id);
+        if (dom) {
+            const inst = echarts.getInstanceByDom(dom);
+            if (inst) inst.resize();
+        }
+    });
+}
+window.addEventListener("resize", resizeAllCharts);
 </script>
 </body>
 </html>
