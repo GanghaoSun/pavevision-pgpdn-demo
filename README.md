@@ -2,17 +2,26 @@
 
 This repository accompanies the manuscript "Physics-guided pavement degradation prediction from grid-level semantic distress maps".
 
-The package is designed for method inspection, frontend visualization and software reuse. It exposes the PG-PDN architecture, feature schema, loss function, visualization utilities, a browser-based PaveVision demo and processed public demonstration records. It does not include raw point clouds, full-route feature tables, trained full-data weights, author-specific working files or any data needed to reconstruct the restricted field surveys.
+The repository is maintained as the public release point for the data, PG-PDN code and PaveVision visualization system associated with the manuscript. It currently provides materials for method inspection, frontend visualization and software reuse, including the PG-PDN architecture, feature schema, loss function, visualization utilities, a browser-based PaveVision demo and processed demonstration records.
 
-## Planned Updates and Current Release Scope
+## Planned Updates
 
-This repository will be updated progressively as the associated manuscript advances through peer review and publication. Additional documentation, examples, processed demonstration data and reproducibility materials may be added after the manuscript is accepted and the corresponding data-sharing permissions are confirmed.
+This repository will be updated continuously as the associated manuscript advances through peer review, acceptance and publication. Additional paper-aligned data, documentation, examples, model resources and reproducibility materials will be uploaded in stages according to the publication status and data-release permissions.
 
-At the current pre-publication stage, the release is intentionally limited to materials that support method inspection, interface demonstration and software reuse. Full survey materials, full-route feature tables, trained full-data weights and restricted training or inference pipelines are withheld to protect unpublished research results and to comply with institutional data-sharing constraints.
+At the current pre-publication stage, the release focuses on materials that support method inspection, interface demonstration and software reuse. The repository will be expanded progressively so that the final public release corresponds to the data availability statement in the accepted paper.
+
+## Update Record
+
+| Date | Uploaded or updated content | Notes |
+| --- | --- | --- |
+| 2026-06-05 | Updated repository release statement and added this update record. | Clarified that the repository will be updated continuously through review, acceptance and publication. |
+| 2026-06-04 | Added PaveVision interface screenshots, PG-PDN architecture illustration and paper-aligned visualization examples. | Supports visual inspection of the route map, quality assessment, performance prediction and grid-level prediction outputs. |
+| 2026-06-03 | Added the public PaveVision web demo, PG-PDN inference package, configuration template, example scripts and demonstration data files. | Provides a staged public release for method inspection and software reuse before manuscript acceptance. |
+| Planned after acceptance | Paper-aligned data release, additional reproducibility materials and any final model or visualization resources approved for public sharing. | The final repository state will be aligned with the accepted manuscript. |
 
 ## PaveVision Interface Preview
 
-PaveVision is a pavement quality assessment and performance-prediction interface built around semantic distress maps and grid-level PG-PDN outputs. The screenshots below are captured from the local PaveVision system; the public repository provides the same frontend layout in `web_demo/` and serves precomputed demo outputs rather than executing the restricted prediction pipeline.
+PaveVision is a pavement quality assessment and performance-prediction interface built around semantic distress maps and grid-level PG-PDN outputs. The screenshots below are captured from the local PaveVision system; the current public repository provides the same frontend layout in `web_demo/` and serves precomputed demonstration outputs for browser-based inspection.
 
 ### Route Map and Quality Popup
 
@@ -30,7 +39,7 @@ The route-map view provides the first entry point for pavement engineers. The pr
 
 ### PG-PDN Network Architecture
 
-The PG-PDN architecture combines an interpretable physical degradation branch with a GRU residual correction branch. This public package keeps the model interface, feature schema, loss terms and visualization workflow consistent with the manuscript, while withholding full survey data and trained full-data weights.
+The PG-PDN architecture combines an interpretable physical degradation branch with a GRU residual correction branch. This public package keeps the model interface, feature schema, loss terms and visualization workflow consistent with the manuscript; additional paper-aligned resources will be uploaded according to the staged release plan.
 
 ![PG-PDN network architecture](assets/pgpdn_architecture.png)
 
@@ -68,13 +77,9 @@ The fig10 series visualizes Route 3 at 0.5 m grid resolution: March 2024 measure
 - `web_demo/data/sample/`: processed public sample JSON files aligned with the manuscript route definitions, survey periods and 0.5 m visualization workflow.
 - `supplementary/`: method notes, data-release statement and figure-generation guidance.
 
-## What Is Not Included
+## Current Staged Release Notes
 
-- Raw mobile mapping point clouds, images or LiDAR scans.
-- Full-route survey data and full-route feature tables.
-- Trained PG-PDN checkpoints or any learned full-data model weights.
-- Core training scripts, full-data inference services or private prediction pipelines bound to the web UI.
-- Raw GPS logs or complete mobile mapping trajectories; the web demo includes only simplified display polylines for the route-map view.
+The pre-acceptance release is intentionally staged. Detailed survey materials, full-route feature tables, final trained model resources and restricted training or inference assets may be added only after manuscript acceptance and data-release approval. The web demo currently serves precomputed demonstration outputs and simplified display polylines for route visualization.
 
 ## Feature Schema
 
@@ -107,7 +112,7 @@ Then open:
 http://localhost:5000
 ```
 
-The web demo's prediction button loads precomputed PG-PDN demonstration outputs from `web_demo/data/sample/`. It does not train PG-PDN, load full-data weights or run the restricted research prediction pipeline.
+The web demo's prediction button currently loads precomputed PG-PDN demonstration outputs from `web_demo/data/sample/`. Additional executable and data resources will be added according to the staged release plan.
 
 For the Python PG-PDN architecture examples, install the minimal modeling dependencies:
 
