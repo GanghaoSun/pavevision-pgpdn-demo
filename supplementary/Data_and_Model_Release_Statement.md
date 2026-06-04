@@ -2,6 +2,12 @@
 
 The public release is intentionally limited to method-inspection materials.
 
+## Planned Updates
+
+This repository will be updated progressively as the associated manuscript advances through peer review and publication. Additional documentation, examples, processed demonstration data and reproducibility materials may be added after the manuscript is accepted and the corresponding data-sharing permissions are confirmed.
+
+At the current pre-publication stage, full survey materials, full-route feature tables, trained full-data weights and restricted training or inference pipelines are intentionally withheld to protect unpublished research results and to comply with institutional data-sharing constraints.
+
 ## Publicly Included
 
 - PG-PDN source code and configuration files.

@@ -4,6 +4,12 @@ This repository accompanies the manuscript "Physics-guided pavement degradation 
 
 The package is designed for method inspection, frontend visualization and software reuse. It exposes the PG-PDN architecture, feature schema, loss function, visualization utilities, a browser-based PaveVision demo and processed public demonstration records. It does not include raw point clouds, full-route feature tables, trained full-data weights, author-specific working files or any data needed to reconstruct the restricted field surveys.
 
+## Planned Updates and Current Release Scope
+
+This repository will be updated progressively as the associated manuscript advances through peer review and publication. Additional documentation, examples, processed demonstration data and reproducibility materials may be added after the manuscript is accepted and the corresponding data-sharing permissions are confirmed.
+
+At the current pre-publication stage, the release is intentionally limited to materials that support method inspection, interface demonstration and software reuse. Full survey materials, full-route feature tables, trained full-data weights and restricted training or inference pipelines are withheld to protect unpublished research results and to comply with institutional data-sharing constraints.
+
 ## PaveVision Interface Preview
 
 PaveVision is a pavement quality assessment and performance-prediction interface built around semantic distress maps and grid-level PG-PDN outputs. The screenshots below are captured from the local PaveVision system; the public repository provides the same frontend layout in `web_demo/` and serves precomputed demo outputs rather than executing the restricted prediction pipeline.
