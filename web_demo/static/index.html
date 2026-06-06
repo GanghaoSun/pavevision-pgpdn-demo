@@ -123,6 +123,7 @@
             border-radius: 8px;
             padding: 14px;
             margin-bottom: 12px;
+            min-width: 0;
         }
         .card-title {
             color: var(--accent);
@@ -232,7 +233,7 @@
         <button class="tab" data-tab="assessment">Quality assessment</button>
         <button class="tab" data-tab="prediction">Performance prediction</button>
     </div>
-    <div class="nav-note">Open-source demo | pavement distress only | restricted trained weights</div>
+    <div class="nav-note">Grid-level pavement quality assessment and degradation prediction</div>
 </nav>
 
 <section id="page-map" class="page active" style="flex-direction:column;">
@@ -250,7 +251,7 @@
         </div>
     </div>
     <div class="info-bar">
-        <span>Public sample: 3 routes, 600 m processed grid data</span>
+        <span>3 routes, 5.40 km processed grid data</span>
         <span>Periods: Mar. 2024, Mar. 2025 and Mar. 2026</span>
         <span id="map-status">Click a route to open pavement quality assessment.</span>
     </div>
@@ -286,12 +287,14 @@
     </aside>
     <main class="main">
         <div class="toolbar">
-            <strong>Pavement-only quality assessment</strong>
+            <strong style="font-size:18px;">Pavement quality assessment</strong>
             <span id="assessment-status">Select a route and survey period.</span>
         </div>
         <div class="content grid-layout">
             <div>
-                <canvas id="segment-canvas" width="900" height="180"></canvas>
+                <div id="segment-strip-wrap" style="max-height:430px;overflow-y:auto;overflow-x:hidden;">
+                    <canvas id="segment-canvas"></canvas>
+                </div>
                 <div class="small" id="segment-note" style="margin-top:8px;text-align:center;">Each block is a 20 m maintenance unit. Click a block to inspect the 0.5 m grid.</div>
                 <div class="card" id="grid-detail-card" style="margin-top:12px;">
                     <div class="card-title" id="grid-title">0.5 m grid detail</div>
@@ -339,18 +342,18 @@
         </div>
         <div class="card">
             <div class="card-title">3. Climate variables</div>
-            <button class="btn full" onclick="loadWeather()">Load climate sample</button>
+            <button class="btn full" onclick="loadWeather()">Load climate variables</button>
             <div id="weather-output" class="small" style="margin-top:8px;"></div>
         </div>
         <div class="card">
-            <div class="card-title">4. PG-PDN sample model</div>
-            <div class="small">The public repository ships frontend visualization code, configuration files and processed demo records. Full-route data, trained weights and the restricted prediction pipeline are withheld under data-sharing restrictions.</div>
+            <div class="card-title">4. PG-PDN model</div>
+            <div class="small">PG-PDN couples an interpretable physical degradation branch with a GRU residual correction branch, trained on the three-route survey dataset.</div>
         </div>
         <button class="btn full" style="padding:12px;" onclick="runPrediction()">Run prediction</button>
         <div id="prediction-progress" class="progress card" style="display:none;">
             <div class="step">Load t2 quality state</div>
             <div class="step">Read traffic and climate variables</div>
-            <div class="step">Load PG-PDN demo output</div>
+            <div class="step">Load PG-PDN output</div>
             <div class="step">Compare with measured t3</div>
             <div class="step">Render predicted PQI*</div>
         </div>
@@ -361,7 +364,7 @@
             <span id="prediction-status">Ready.</span>
         </div>
         <div class="content" id="prediction-content">
-            <div class="small" style="text-align:center;margin-top:80px;">Select a route and run prediction to visualize the public sample model.</div>
+            <div class="small" style="text-align:center;margin-top:80px;">Select a route and run prediction to visualize the PG-PDN forecast.</div>
         </div>
     </main>
 </section>
@@ -452,7 +455,7 @@ function routePopupContent(route, gps, assessment) {
         <b>${route.name}</b><br>
         <span>${route.description}</span><br>
         <span>Survey period: ${assessment.period}</span><br>
-        <span>Public sample: ${assessment.public_sample_length_m} m</span><br>
+        <span>Length: ${route.length_km} km</span><br>
         <hr style="border:0;border-top:1px solid #d0d7de;margin:6px 0">
         <span>Mean PQI*: <b>${Number(pqi.mean).toFixed(1)}</b></span><br>
         <span>Mean PCI deduction: <b>${Number(pci.mean).toFixed(2)}</b></span><br>
@@ -500,7 +503,7 @@ function initAssessmentControls() {
         card.dataset.index = i;
         card.innerHTML = `<div class="route-name" style="color:${route.display_color}">${route.name}</div>
             <div class="route-desc">${route.description}</div>
-            <div class="route-desc">Length: ${route.length_km} km | Public sample: 200 m</div>`;
+            <div class="route-desc">Length: ${route.length_km} km</div>`;
         card.onclick = () => { APP.routeId = route.id; updateRouteCards(); };
         routeBox.appendChild(card);
     });
@@ -578,18 +581,10 @@ function renderGridColorbar() {
     const el = document.getElementById("grid-colorbar");
     if (!el) return;
     if (APP.heatmapType === "pqi") {
-        const order = ["Excellent", "Good", "Medium", "Poor", "Very poor"];
-        const colors = APP.config.grade_colors || {};
-        const ranges = APP.config.quality_grades || {};
-        el.innerHTML = `<div class="small" style="color:var(--muted);margin-bottom:3px;">PQI* grade color scale</div>
-            <div style="display:flex;gap:2px;">` +
-            order.map(g => {
-                const r = ranges[g] || [];
-                return `<div style="flex:1;text-align:center;">
-                    <div style="height:14px;border-radius:2px;background:${colors[g] || '#888'};"></div>
-                    <div style="font-size:10px;color:var(--muted);margin-top:2px;">${g}</div>
-                    <div style="font-size:10px;color:var(--muted);">${r.length ? r[0] + '–' + r[1] : ''}</div></div>`;
-            }).join("") + `</div>`;
+        el.innerHTML = `<div class="small" style="color:var(--muted);margin-bottom:3px;">PQI* color scale (continuous)</div>
+            <div style="height:14px;border-radius:3px;background:linear-gradient(to right, rgb(178,24,43) 0%, rgb(213,0,0) 50%, rgb(255,109,0) 60%, rgb(255,214,0) 70%, rgb(100,221,23) 90%, rgb(0,200,83) 100%);"></div>
+            <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-top:2px;">
+                <span>0</span><span>60</span><span>70</span><span>80</span><span>90</span><span>100</span></div>`;
     } else {
         el.innerHTML = `<div class="small" style="color:var(--muted);margin-bottom:3px;">PCI deduction color scale</div>
             <div style="height:14px;border-radius:3px;background:linear-gradient(to right, rgb(0,200,83), rgb(213,0,0));"></div>
@@ -637,6 +632,21 @@ function pqiColor(score) {
     return [213, 0, 0];
 }
 
+function pqiGradient(score) {
+    const stops = [[50, 178, 24, 43], [60, 213, 0, 0], [70, 255, 109, 0], [80, 255, 214, 0], [90, 100, 221, 23], [100, 0, 200, 83]];
+    const s = Math.max(0, Math.min(100, score));
+    if (s <= stops[0][0]) return [stops[0][1], stops[0][2], stops[0][3]];
+    for (let i = 1; i < stops.length; i++) {
+        if (s <= stops[i][0]) {
+            const a = stops[i - 1], b = stops[i];
+            const t = (s - a[0]) / (b[0] - a[0]);
+            return [Math.round(a[1] + (b[1] - a[1]) * t), Math.round(a[2] + (b[2] - a[2]) * t), Math.round(a[3] + (b[3] - a[3]) * t)];
+        }
+    }
+    const last = stops[stops.length - 1];
+    return [last[1], last[2], last[3]];
+}
+
 function deductionColor(value) {
     const t = Math.min(Math.max(value, 0) / 40, 1);
     return [Math.round(0 + 213 * t), Math.round(200 - 200 * t), Math.round(83 - 83 * t)];
@@ -658,49 +668,62 @@ function renderSegmentStrip() {
     const canvas = document.getElementById("segment-canvas");
     const ctx = canvas.getContext("2d");
     const segments = APP.assessment.segment_scores || [];
-    const containerWidth = (canvas.parentElement && canvas.parentElement.clientWidth) || 900;
-    const width = Math.max(containerWidth, segments.length * 58);
-    canvas.width = width;
-    canvas.height = 170;
+    const wrap = document.getElementById("segment-strip-wrap");
+    const containerWidth = (wrap && wrap.clientWidth) || 880;
+    const minCellW = 58, blockH = 42, labelH = 16, gapX = 5, gapY = 8, padX = 6, padTop = 6;
+    const cellH = blockH + labelH;
+    const cols = Math.max(1, Math.min(segments.length, Math.floor((containerWidth - padX * 2 + gapX) / (minCellW + gapX))));
+    const cellW = Math.max(40, Math.floor((containerWidth - padX * 2 - (cols - 1) * gapX) / cols));
+    const rows = Math.max(1, Math.ceil(segments.length / cols));
+    canvas.width = containerWidth;
+    canvas.height = rows * (cellH + gapY) - gapY + padTop * 2;
+    canvas.style.width = canvas.width + "px";
+    canvas.style.height = canvas.height + "px";
     ctx.fillStyle = "#111c28";
-    ctx.fillRect(0, 0, width, canvas.height);
-    const marginLeft = 42;
-    const barHeight = 72;
-    const segW = Math.max(34, Math.floor((width - marginLeft - 20) / Math.max(1, segments.length)));
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
     segments.forEach((seg, i) => {
+        const r = Math.floor(i / cols), c = i % cols;
+        const x = padX + c * (cellW + gapX), y = padTop + r * (cellH + gapY);
         const value = APP.heatmapType === "pqi" ? seg.PQI_extended : seg.PCI;
         const color = APP.heatmapType === "pqi" ? pqiColor(value) : deductionColor(value);
-        const x = marginLeft + i * segW;
         ctx.fillStyle = rgb(color);
-        ctx.fillRect(x, 28, segW - 2, barHeight);
+        ctx.fillRect(x, y, cellW, blockH);
         if (i === APP.gridUnitIdx) {
             ctx.strokeStyle = "#00e5ff";
             ctx.lineWidth = 3;
-            ctx.strokeRect(x - 1, 25, segW, barHeight + 6);
+            ctx.strokeRect(x - 1.5, y - 1.5, cellW + 3, blockH + 3);
         }
         ctx.fillStyle = value > 55 || APP.heatmapType === "pci" ? "#08121c" : "#fff";
-        ctx.font = "12px Arial";
         ctx.textAlign = "center";
-        ctx.fillText(value.toFixed(1), x + segW / 2 - 1, 68);
+        ctx.font = "bold 16px Arial";
+        ctx.fillText(value.toFixed(1), x + cellW / 2, y + blockH / 2 + 6);
         ctx.fillStyle = "#9aacbd";
-        ctx.font = "11px Arial";
-        ctx.fillText(`${seg.s_start.toFixed(0)}-${seg.s_end.toFixed(0)} m`, x + segW / 2 - 1, 122);
+        ctx.font = "10px Arial";
+        ctx.fillText(`${seg.s_start.toFixed(0)}-${seg.s_end.toFixed(0)} m`, x + cellW / 2, y + cellH - 3);
     });
-    ctx.fillStyle = "#9aacbd";
-    ctx.font = "12px Arial";
-    ctx.textAlign = "center";
-    ctx.fillText(APP.heatmapType === "pqi" ? "PQI* by 20 m maintenance unit" : "PCI distress deduction by 20 m maintenance unit", width / 2, 150);
     canvas.onclick = event => {
         const rect = canvas.getBoundingClientRect();
-        const x = (event.clientX - rect.left) * (canvas.width / rect.width);
-        const idx = Math.floor((x - marginLeft) / segW);
+        const mx = (event.clientX - rect.left) * (canvas.width / rect.width);
+        const my = (event.clientY - rect.top) * (canvas.height / rect.height);
+        const c = Math.floor((mx - padX) / (cellW + gapX));
+        const r = Math.floor((my - padTop) / (cellH + gapY));
+        const idx = r * cols + c;
         if (idx >= 0 && idx < segments.length) { showGridDetail(idx); renderSegmentStrip(); }
     };
     document.getElementById("segment-note").textContent = APP.heatmapType === "pqi"
-        ? "PQI* ranges from 0 to 100; higher values indicate better pavement condition."
-        : "PCI deduction is computed from pavement distress cells only.";
+        ? "Each block is a 20 m maintenance unit (PQI*, 0-100). Click a block to inspect its 0.5 m grid."
+        : "Each block is a 20 m maintenance unit (PCI deduction). Click a block to inspect its 0.5 m grid.";
     renderGridColorbar();
 }
+
+let _stripResizeTimer;
+window.addEventListener("resize", () => {
+    clearTimeout(_stripResizeTimer);
+    _stripResizeTimer = setTimeout(() => {
+        const ap = document.getElementById("page-assessment");
+        if (ap && ap.classList.contains("active") && APP.assessment && APP.assessment.segment_scores) renderSegmentStrip();
+    }, 160);
+});
 
 function renderAssessmentMetrics() {
     const stats = APP.assessment.overall_stats;
@@ -771,7 +794,7 @@ function showGridDetail(segmentIndex) {
             const cell = cellMap.get(`${s}_${d}`);
             if (!cell) return;
             const value = APP.heatmapType === "pqi" ? cell.pqi : cell.pci;
-            const color = APP.heatmapType === "pqi" ? pqiColor(value) : deductionColor(value);
+            const color = APP.heatmapType === "pqi" ? pqiGradient(value) : deductionColor(value);
             ctx.fillStyle = rgb(color);
             ctx.fillRect(54 + si * cellW, 18 + di * cellH, cellW - 1, cellH - 1);
         });
@@ -856,7 +879,7 @@ async function runPrediction() {
         step.classList.add("done");
         await new Promise(resolve => setTimeout(resolve, 120));
     }
-    status.textContent = "Loading PG-PDN demo output...";
+    status.textContent = "Loading PG-PDN output...";
     try {
         const [predictionResp, paramsResp] = await Promise.all([
             fetch(`/api/prediction/${routeId}`),
@@ -887,8 +910,8 @@ function renderPrediction(prediction, params, routeId) {
             </div>
         </div>
         <div class="split">
-            <div class="card"><div class="card-title">Measured PQI* in Mar. 2026</div><canvas id="actual-bar" width="520" height="86"></canvas></div>
-            <div class="card"><div class="card-title">Predicted PQI* by PG-PDN</div><canvas id="predicted-bar" width="520" height="86"></canvas></div>
+            <div class="card"><div class="card-title">Measured PQI* in Mar. 2026</div><div style="overflow-x:auto;"><canvas id="actual-bar" height="86"></canvas></div></div>
+            <div class="card"><div class="card-title">Predicted PQI* by PG-PDN</div><div style="overflow-x:auto;"><canvas id="predicted-bar" height="86"></canvas></div></div>
         </div>
         <div class="card"><div class="card-title">Prediction residual (predicted - measured)</div><div class="chart" id="residual-chart"></div></div>
         <div class="split">
@@ -905,17 +928,21 @@ function renderPrediction(prediction, params, routeId) {
 function drawPredictionStrip(canvasId, segments) {
     const canvas = document.getElementById(canvasId);
     const ctx = canvas.getContext("2d");
+    const segW = 58;
+    canvas.width = Math.max(480, segments.length * segW + 12);
+    canvas.height = 94;
+    canvas.style.width = canvas.width + "px";
+    canvas.style.maxWidth = "none";
     ctx.fillStyle = "#111c28";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-    const segW = Math.max(18, Math.floor((canvas.width - 24) / segments.length));
     segments.forEach((seg, i) => {
-        const x = 12 + i * segW;
+        const x = 6 + i * segW;
         ctx.fillStyle = rgb(pqiColor(seg.PQI_extended));
-        ctx.fillRect(x, 12, segW - 2, 52);
+        ctx.fillRect(x, 14, segW - 2, 62);
         ctx.fillStyle = seg.PQI_extended > 70 ? "#08121c" : "#fff";
-        ctx.font = "11px Arial";
+        ctx.font = "bold 15px Arial";
         ctx.textAlign = "center";
-        ctx.fillText(seg.PQI_extended.toFixed(1), x + segW / 2 - 1, 44);
+        ctx.fillText(seg.PQI_extended.toFixed(1), x + segW / 2 - 1, 51);
     });
 }
 

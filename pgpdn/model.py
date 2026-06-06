@@ -11,7 +11,7 @@ Chapter:
 
 Notes:
     This file provides architecture code only. No trained weights from the
-    restricted field data are included in the public package.
+    raw field data are included in the public package.
 """
 
 from __future__ import annotations

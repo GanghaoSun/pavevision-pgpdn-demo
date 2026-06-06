@@ -1,6 +1,6 @@
 # Supplementary Methods: Public PG-PDN Demonstration
 
-This note documents the public implementation scope for the PG-PDN demonstration package. It is intended to help readers inspect the model structure without exposing restricted field data or trained weights.
+This note documents the public implementation scope for the PG-PDN demonstration package. It is intended to help readers inspect the model structure and reproduce the assessment and prediction workflow.
 
 ## S1. Feature Vector
 
@@ -39,6 +39,6 @@ The public visualization functions support:
 - Residual maps when user-supplied predictions are available.
 - Figure templates for manuscript-style outputs.
 
-The repository also includes a browser-based PaveVision web demo under `web_demo/`. Its frontend layout follows the manuscript system interface, while the backend serves processed public sample JSON files and precomputed PG-PDN demo outputs. The demo is intended for workflow inspection only; it does not expose raw point clouds, full-route data, trained full-data weights or the restricted prediction pipeline.
+The repository also includes a browser-based PaveVision web demo under `web_demo/`. Its frontend layout follows the manuscript system interface, while the backend serves the processed pavement quality data and precomputed PG-PDN outputs for the three routes. The upstream raw point clouds and perception pipeline are developed as separate work and will be added after acceptance.
 
 The standalone sample figures in `assets/` illustrate the manuscript-style visualization workflow. They should not be interpreted as an additional validation dataset beyond the experiments reported in the manuscript.

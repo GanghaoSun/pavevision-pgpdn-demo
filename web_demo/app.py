@@ -1,9 +1,7 @@
-"""PaveVision public web demo service.
+"""PaveVision web system service.
 
-This service intentionally serves precomputed demonstration outputs. The
-prediction button in the frontend loads JSON files prepared for the public demo;
-it does not train PG-PDN, load full-data weights or run the restricted research
-prediction pipeline.
+This service loads the processed pavement quality assessment and PG-PDN
+prediction outputs for the three surveyed routes.
 """
 
 from __future__ import annotations
@@ -106,8 +104,7 @@ TRAFFIC_BY_ROUTE = {
 
 # Physical-branch parameters as reported in the manuscript
 # (Table: initial and learned parameters in the physical branch).
-# These 10 interpretable scalars are published in the paper; only the trained
-# GRU residual-branch weights remain withheld under data-sharing restrictions.
+# These 10 interpretable scalars are published in the paper (physical branch).
 PHYSICAL_PARAMS_INITIAL = {
     "alpha0": 0.008,
     "alpha1": 0.012,
@@ -131,6 +128,13 @@ PHYSICAL_PARAMS_LEARNED = {
     "beta3": 0.0160,
     "beta4": 0.0180,
     "gamma": 0.0110,
+}
+
+# Per-route 20 m maintenance-unit MAE/RMSE (manuscript Fig. 14-16).
+BASELINE_COMPARISON = {
+    "route1": {"HDM4": {"MAE": 2.15, "RMSE": 2.69}, "XGBoost": {"MAE": 2.172, "RMSE": 2.225}, "LSTM": {"MAE": 2.450, "RMSE": 2.513}, "GRU": {"MAE": 1.150, "RMSE": 1.196}},
+    "route2": {"HDM4": {"MAE": 1.82, "RMSE": 2.28}, "XGBoost": {"MAE": 1.837, "RMSE": 1.937}, "LSTM": {"MAE": 2.860, "RMSE": 2.969}, "GRU": {"MAE": 1.097, "RMSE": 1.147}},
+    "route3": {"HDM4": {"MAE": 3.68, "RMSE": 4.60}, "XGBoost": {"MAE": 1.050, "RMSE": 1.141}, "LSTM": {"MAE": 2.520, "RMSE": 2.634}, "GRU": {"MAE": 0.880, "RMSE": 0.931}},
 }
 
 app = Flask(__name__, static_folder="static")
@@ -211,12 +215,9 @@ def get_config():
             "quality_grades": {grade: list(value_range) for grade, value_range in QUALITY_GRADES.items()},
             "grade_colors": GRADE_COLORS,
             "release": {
-                "name": "PaveVision public web demo",
-                "dataset": "600 m processed public sample data",
-                "raw_pcd_included": False,
+                "name": "PaveVision",
+                "dataset": "5.40 km processed grid data",
                 "pavement_only_quality_assessment": True,
-                "prediction_mode": "precomputed demo output only",
-                "full_data_weights": "withheld under data-sharing restrictions",
             },
         }
     )
@@ -255,6 +256,8 @@ def get_prediction(route_id: str):
         for i in range(min(len(actual_segments), len(predicted_segments)))
     ]
     model_metrics = _metrics(actual_segments, predicted_segments)
+    comparison = {k: dict(v) for k, v in BASELINE_COMPARISON.get(route_id, {}).items()}
+    comparison["PG_PDN"] = model_metrics
     return _json_response(
         {
             "actual": actual,
@@ -262,9 +265,10 @@ def get_prediction(route_id: str):
             "baseline": baseline,
             "residuals": residuals,
             "metrics": model_metrics,
+            "comparison": comparison,
             "model": {
-                "name": "PG-PDN precomputed public demo output",
-                "release_policy": "Full-route survey data and trained full-data weights are withheld.",
+                "name": "PG-PDN",
+                "release_policy": "PG-PDN trained on the three-route survey dataset.",
             },
         }
     )
@@ -326,12 +330,12 @@ def get_model_params():
             "physics_params": {"initial": PHYSICAL_PARAMS_INITIAL, "trained": PHYSICAL_PARAMS_LEARNED},
             "residual_params": {
                 "type": "GRU residual correction branch",
-                "release": "architecture disclosed; trained full-data weights withheld",
+                "release": "single-layer GRU with hidden dimension 16",
             },
             "loss_weights": {"lambda_prediction": 1.0, "lambda_nonnegative": 0.5, "lambda_smoothness": 0.1},
             "physics_ratio": 78.3,
             "data_ratio": 21.7,
-            "model_release": "The public web demo loads precomputed PG-PDN outputs and does not execute the restricted prediction pipeline.",
+            "model_release": "PG-PDN trained on the three-route survey dataset.",
         }
     )
 
@@ -339,9 +343,9 @@ def get_model_params():
 if __name__ == "__main__":
     port = int(os.environ.get("FLASK_PORT", 5000))
     print("=" * 68)
-    print("  PaveVision public web demo")
+    print("  PaveVision web system")
     print("=" * 68)
     print(f"  URL: http://localhost:{port}")
-    print("  Mode: precomputed public demo output only")
+    print("  Mode: PG-PDN prediction")
     print("=" * 68)
     app.run(host="0.0.0.0", port=port, debug=False)

@@ -1,7 +1,7 @@
 """Visualization helpers for synthetic PG-PDN demonstrations.
 
 The functions here are intentionally data-agnostic. They operate on tables
-with Frenet coordinates and PQI* values and do not require restricted survey
+with Frenet coordinates and PQI* values and do not require raw survey
 data or model weights.
 """
 

@@ -1,124 +1,1483 @@
 ﻿{
-    "schema_version":  2,
-    "route_id":  "route3",
-    "scene":  "Industrial straight route",
-    "period":  "Mar. 2026",
-    "segment_length":  20.0,
-    "public_sample_length_m":  200.0,
-    "segment_scores":  [
-                           {
-                               "segment_id":  1,
-                               "s_start":  0.0,
-                               "s_end":  20.0,
-                               "cell_count":  560,
-                               "PCI":  9.4982,
-                               "PQI_extended":  90.5018,
-                               "quality_grade":  "Excellent"
-                           },
-                           {
-                               "segment_id":  2,
-                               "s_start":  20.0,
-                               "s_end":  40.0,
-                               "cell_count":  560,
-                               "PCI":  12.2904,
-                               "PQI_extended":  87.7096,
-                               "quality_grade":  "Good"
-                           },
-                           {
-                               "segment_id":  3,
-                               "s_start":  40.0,
-                               "s_end":  60.0,
-                               "cell_count":  560,
-                               "PCI":  11.4146,
-                               "PQI_extended":  88.5854,
-                               "quality_grade":  "Good"
-                           },
-                           {
-                               "segment_id":  4,
-                               "s_start":  60.0,
-                               "s_end":  80.0,
-                               "cell_count":  560,
-                               "PCI":  15.337,
-                               "PQI_extended":  84.663,
-                               "quality_grade":  "Good"
-                           },
-                           {
-                               "segment_id":  5,
-                               "s_start":  80.0,
-                               "s_end":  100.0,
-                               "cell_count":  559,
-                               "PCI":  9.0385,
-                               "PQI_extended":  90.9615,
-                               "quality_grade":  "Excellent"
-                           },
-                           {
-                               "segment_id":  6,
-                               "s_start":  100.0,
-                               "s_end":  120.0,
-                               "cell_count":  560,
-                               "PCI":  6.8841,
-                               "PQI_extended":  93.1159,
-                               "quality_grade":  "Excellent"
-                           },
-                           {
-                               "segment_id":  7,
-                               "s_start":  120.0,
-                               "s_end":  140.0,
-                               "cell_count":  560,
-                               "PCI":  14.0952,
-                               "PQI_extended":  85.9048,
-                               "quality_grade":  "Good"
-                           },
-                           {
-                               "segment_id":  8,
-                               "s_start":  140.0,
-                               "s_end":  160.0,
-                               "cell_count":  560,
-                               "PCI":  18.0659,
-                               "PQI_extended":  81.9341,
-                               "quality_grade":  "Good"
-                           },
-                           {
-                               "segment_id":  9,
-                               "s_start":  160.0,
-                               "s_end":  180.0,
-                               "cell_count":  560,
-                               "PCI":  4.8193,
-                               "PQI_extended":  95.1807,
-                               "quality_grade":  "Excellent"
-                           },
-                           {
-                               "segment_id":  10,
-                               "s_start":  180.0,
-                               "s_end":  200.0,
-                               "cell_count":  448,
-                               "PCI":  9.8717,
-                               "PQI_extended":  90.1283,
-                               "quality_grade":  "Excellent"
-                           }
-                       ],
-    "overall_stats":  {
-                          "PQI_extended":  {
-                                               "mean":  88.8685,
-                                               "min":  81.9341,
-                                               "max":  95.1807,
-                                               "std":  3.7749
-                                           },
-                          "PCI":  {
-                                      "mean":  11.1315,
-                                      "min":  4.8193,
-                                      "max":  18.0659,
-                                      "std":  3.7749
-                                  },
-                          "grade_distribution":  {
-                                                     "Excellent":  5,
-                                                     "Good":  5,
-                                                     "Medium":  0,
-                                                     "Poor":  0,
-                                                     "Very poor":  0
-                                                 },
-                          "n_segments":  10,
-                          "pavement_only":  true
-                      },
-    "method_note":  "Pavement-only quality assessment based on distress grid cells."
+  "schema_version": 2,
+  "route_id": "route3",
+  "scene": "Industrial straight route",
+  "period": "Mar. 2026",
+  "segment_length": 20.0,
+  "route_length_m": 3212.5,
+  "segment_scores": [
+    {
+      "segment_id": 1,
+      "s_start": 0.0,
+      "s_end": 20.0,
+      "cell_count": 560,
+      "PCI": 1.3259,
+      "PQI_extended": 98.6741,
+      "quality_grade": "Excellent"
+    },
+    {
+      "segment_id": 2,
+      "s_start": 20.0,
+      "s_end": 40.0,
+      "cell_count": 560,
+      "PCI": 0.9114,
+      "PQI_extended": 99.0886,
+      "quality_grade": "Excellent"
+    },
+    {
+      "segment_id": 3,
+      "s_start": 40.0,
+      "s_end": 60.0,
+      "cell_count": 560,
+      "PCI": 2.099,
+      "PQI_extended": 97.901,
+      "quality_grade": "Excellent"
+    },
+    {
+      "segment_id": 4,
+      "s_start": 60.0,
+      "s_end": 80.0,
+      "cell_count": 560,
+      "PCI": 3.1904,
+      "PQI_extended": 96.8096,
+      "quality_grade": "Excellent"
+    },
+    {
+      "segment_id": 5,
+      "s_start": 80.0,
+      "s_end": 100.0,
+      "cell_count": 560,
+      "PCI": 1.3836,
+      "PQI_extended": 98.6164,
+      "quality_grade": "Excellent"
+    },
+    {
+      "segment_id": 6,
+      "s_start": 100.0,
+      "s_end": 120.0,
+      "cell_count": 560,
+      "PCI": 2.0988,
+      "PQI_extended": 97.9012,
+      "quality_grade": "Excellent"
+    },
+    {
+      "segment_id": 7,
+      "s_start": 120.0,
+      "s_end": 140.0,
+      "cell_count": 560,
+      "PCI": 1.8555,
+      "PQI_extended": 98.1445,
+      "quality_grade": "Excellent"
+    },
+    {
+      "segment_id": 8,
+      "s_start": 140.0,
+      "s_end": 160.0,
+      "cell_count": 560,
+      "PCI": 4.3407,
+      "PQI_extended": 95.6593,
+      "quality_grade": "Excellent"
+    },
+    {
+      "segment_id": 9,
+      "s_start": 160.0,
+      "s_end": 180.0,
+      "cell_count": 560,
+      "PCI": 0.9988,
+      "PQI_extended": 99.0012,
+      "quality_grade": "Excellent"
+    },
+    {
+      "segment_id": 10,
+      "s_start": 180.0,
+      "s_end": 200.0,
+      "cell_count": 560,
+      "PCI": 1.3395,
+      "PQI_extended": 98.6605,
+      "quality_grade": "Excellent"
+    },
+    {
+      "segment_id": 11,
+      "s_start": 200.0,
+      "s_end": 220.0,
+      "cell_count": 560,
+      "PCI": 1.3886,
+      "PQI_extended": 98.6114,
+      "quality_grade": "Excellent"
+    },
+    {
+      "segment_id": 12,
+      "s_start": 220.0,
+      "s_end": 240.0,
+      "cell_count": 560,
+      "PCI": 1.703,
+      "PQI_extended": 98.297,
+      "quality_grade": "Excellent"
+    },
+    {
+      "segment_id": 13,
+      "s_start": 240.0,
+      "s_end": 260.0,
+      "cell_count": 560,
+      "PCI": 1.9841,
+      "PQI_extended": 98.0159,
+      "quality_grade": "Excellent"
+    },
+    {
+      "segment_id": 14,
+      "s_start": 260.0,
+      "s_end": 280.0,
+      "cell_count": 560,
+      "PCI": 2.1354,
+      "PQI_extended": 97.8646,
+      "quality_grade": "Excellent"
+    },
+    {
+      "segment_id": 15,
+      "s_start": 280.0,
+      "s_end": 300.0,
+      "cell_count": 560,
+      "PCI": 2.6888,
+      "PQI_extended": 97.3112,
+      "quality_grade": "Excellent"
+    },
+    {
+      "segment_id": 16,
+      "s_start": 300.0,
+      "s_end": 320.0,
+      "cell_count": 560,
+      "PCI": 2.9336,
+      "PQI_extended": 97.0664,
+      "quality_grade": "Excellent"
+    },
+    {
+      "segment_id": 17,
+      "s_start": 320.0,
+      "s_end": 340.0,
+      "cell_count": 560,
+      "PCI": 3.0173,
+      "PQI_extended": 96.9827,
+      "quality_grade": "Excellent"
+    },
+    {
+      "segment_id": 18,
+      "s_start": 340.0,
+      "s_end": 360.0,
+      "cell_count": 560,
+      "PCI": 3.7344,
+      "PQI_extended": 96.2656,
+      "quality_grade": "Excellent"
+    },
+    {
+      "segment_id": 19,
+      "s_start": 360.0,
+      "s_end": 380.0,
+      "cell_count": 560,
+      "PCI": 4.0139,
+      "PQI_extended": 95.9861,
+      "quality_grade": "Excellent"
+    },
+    {
+      "segment_id": 20,
+      "s_start": 380.0,
+      "s_end": 400.0,
+      "cell_count": 560,
+      "PCI": 3.9062,
+      "PQI_extended": 96.0938,
+      "quality_grade": "Excellent"
+    },
+    {
+      "segment_id": 21,
+      "s_start": 400.0,
+      "s_end": 420.0,
+      "cell_count": 560,
+      "PCI": 4.0982,
+      "PQI_extended": 95.9018,
+      "quality_grade": "Excellent"
+    },
+    {
+      "segment_id": 22,
+      "s_start": 420.0,
+      "s_end": 440.0,
+      "cell_count": 560,
+      "PCI": 3.5078,
+      "PQI_extended": 96.4922,
+      "quality_grade": "Excellent"
+    },
+    {
+      "segment_id": 23,
+      "s_start": 440.0,
+      "s_end": 460.0,
+      "cell_count": 560,
+      "PCI": 3.0765,
+      "PQI_extended": 96.9235,
+      "quality_grade": "Excellent"
+    },
+    {
+      "segment_id": 24,
+      "s_start": 460.0,
+      "s_end": 480.0,
+      "cell_count": 560,
+      "PCI": 2.253,
+      "PQI_extended": 97.747,
+      "quality_grade": "Excellent"
+    },
+    {
+      "segment_id": 25,
+      "s_start": 480.0,
+      "s_end": 500.0,
+      "cell_count": 560,
+      "PCI": 2.1647,
+      "PQI_extended": 97.8353,
+      "quality_grade": "Excellent"
+    },
+    {
+      "segment_id": 26,
+      "s_start": 500.0,
+      "s_end": 520.0,
+      "cell_count": 560,
+      "PCI": 3.0276,
+      "PQI_extended": 96.9724,
+      "quality_grade": "Excellent"
+    },
+    {
+      "segment_id": 27,
+      "s_start": 520.0,
+      "s_end": 540.0,
+      "cell_count": 560,
+      "PCI": 3.415,
+      "PQI_extended": 96.585,
+      "quality_grade": "Excellent"
+    },
+    {
+      "segment_id": 28,
+      "s_start": 540.0,
+      "s_end": 560.0,
+      "cell_count": 560,
+      "PCI": 4.015,
+      "PQI_extended": 95.985,
+      "quality_grade": "Excellent"
+    },
+    {
+      "segment_id": 29,
+      "s_start": 560.0,
+      "s_end": 580.0,
+      "cell_count": 560,
+      "PCI": 4.3749,
+      "PQI_extended": 95.6251,
+      "quality_grade": "Excellent"
+    },
+    {
+      "segment_id": 30,
+      "s_start": 580.0,
+      "s_end": 600.0,
+      "cell_count": 560,
+      "PCI": 4.438,
+      "PQI_extended": 95.562,
+      "quality_grade": "Excellent"
+    },
+    {
+      "segment_id": 31,
+      "s_start": 600.0,
+      "s_end": 620.0,
+      "cell_count": 560,
+      "PCI": 4.7521,
+      "PQI_extended": 95.2479,
+      "quality_grade": "Excellent"
+    },
+    {
+      "segment_id": 32,
+      "s_start": 620.0,
+      "s_end": 640.0,
+      "cell_count": 560,
+      "PCI": 4.8187,
+      "PQI_extended": 95.1813,
+      "quality_grade": "Excellent"
+    },
+    {
+      "segment_id": 33,
+      "s_start": 640.0,
+      "s_end": 660.0,
+      "cell_count": 560,
+      "PCI": 5.104,
+      "PQI_extended": 94.896,
+      "quality_grade": "Excellent"
+    },
+    {
+      "segment_id": 34,
+      "s_start": 660.0,
+      "s_end": 680.0,
+      "cell_count": 560,
+      "PCI": 5.1707,
+      "PQI_extended": 94.8293,
+      "quality_grade": "Excellent"
+    },
+    {
+      "segment_id": 35,
+      "s_start": 680.0,
+      "s_end": 700.0,
+      "cell_count": 560,
+      "PCI": 5.299,
+      "PQI_extended": 94.701,
+      "quality_grade": "Excellent"
+    },
+    {
+      "segment_id": 36,
+      "s_start": 700.0,
+      "s_end": 720.0,
+      "cell_count": 560,
+      "PCI": 5.4034,
+      "PQI_extended": 94.5966,
+      "quality_grade": "Excellent"
+    },
+    {
+      "segment_id": 37,
+      "s_start": 720.0,
+      "s_end": 740.0,
+      "cell_count": 560,
+      "PCI": 5.6097,
+      "PQI_extended": 94.3903,
+      "quality_grade": "Excellent"
+    },
+    {
+      "segment_id": 38,
+      "s_start": 740.0,
+      "s_end": 760.0,
+      "cell_count": 560,
+      "PCI": 6.7991,
+      "PQI_extended": 93.2009,
+      "quality_grade": "Excellent"
+    },
+    {
+      "segment_id": 39,
+      "s_start": 760.0,
+      "s_end": 780.0,
+      "cell_count": 560,
+      "PCI": 7.8991,
+      "PQI_extended": 92.1009,
+      "quality_grade": "Excellent"
+    },
+    {
+      "segment_id": 40,
+      "s_start": 780.0,
+      "s_end": 800.0,
+      "cell_count": 560,
+      "PCI": 9.1827,
+      "PQI_extended": 90.8173,
+      "quality_grade": "Excellent"
+    },
+    {
+      "segment_id": 41,
+      "s_start": 800.0,
+      "s_end": 820.0,
+      "cell_count": 560,
+      "PCI": 11.9703,
+      "PQI_extended": 88.0297,
+      "quality_grade": "Good"
+    },
+    {
+      "segment_id": 42,
+      "s_start": 820.0,
+      "s_end": 840.0,
+      "cell_count": 560,
+      "PCI": 14.4012,
+      "PQI_extended": 85.5988,
+      "quality_grade": "Good"
+    },
+    {
+      "segment_id": 43,
+      "s_start": 840.0,
+      "s_end": 860.0,
+      "cell_count": 560,
+      "PCI": 17.0301,
+      "PQI_extended": 82.9699,
+      "quality_grade": "Good"
+    },
+    {
+      "segment_id": 44,
+      "s_start": 860.0,
+      "s_end": 880.0,
+      "cell_count": 560,
+      "PCI": 19.0185,
+      "PQI_extended": 80.9815,
+      "quality_grade": "Good"
+    },
+    {
+      "segment_id": 45,
+      "s_start": 880.0,
+      "s_end": 900.0,
+      "cell_count": 560,
+      "PCI": 19.0913,
+      "PQI_extended": 80.9087,
+      "quality_grade": "Good"
+    },
+    {
+      "segment_id": 46,
+      "s_start": 900.0,
+      "s_end": 920.0,
+      "cell_count": 560,
+      "PCI": 25.4554,
+      "PQI_extended": 74.5446,
+      "quality_grade": "Medium"
+    },
+    {
+      "segment_id": 47,
+      "s_start": 920.0,
+      "s_end": 940.0,
+      "cell_count": 560,
+      "PCI": 26.9631,
+      "PQI_extended": 73.0369,
+      "quality_grade": "Medium"
+    },
+    {
+      "segment_id": 48,
+      "s_start": 940.0,
+      "s_end": 960.0,
+      "cell_count": 560,
+      "PCI": 18.8339,
+      "PQI_extended": 81.1661,
+      "quality_grade": "Good"
+    },
+    {
+      "segment_id": 49,
+      "s_start": 960.0,
+      "s_end": 980.0,
+      "cell_count": 560,
+      "PCI": 18.9882,
+      "PQI_extended": 81.0118,
+      "quality_grade": "Good"
+    },
+    {
+      "segment_id": 50,
+      "s_start": 980.0,
+      "s_end": 1000.0,
+      "cell_count": 560,
+      "PCI": 20.9127,
+      "PQI_extended": 79.0873,
+      "quality_grade": "Medium"
+    },
+    {
+      "segment_id": 51,
+      "s_start": 1000.0,
+      "s_end": 1020.0,
+      "cell_count": 560,
+      "PCI": 21.1513,
+      "PQI_extended": 78.8487,
+      "quality_grade": "Medium"
+    },
+    {
+      "segment_id": 52,
+      "s_start": 1020.0,
+      "s_end": 1040.0,
+      "cell_count": 560,
+      "PCI": 17.7184,
+      "PQI_extended": 82.2816,
+      "quality_grade": "Good"
+    },
+    {
+      "segment_id": 53,
+      "s_start": 1040.0,
+      "s_end": 1060.0,
+      "cell_count": 560,
+      "PCI": 15.5765,
+      "PQI_extended": 84.4235,
+      "quality_grade": "Good"
+    },
+    {
+      "segment_id": 54,
+      "s_start": 1060.0,
+      "s_end": 1080.0,
+      "cell_count": 560,
+      "PCI": 12.7962,
+      "PQI_extended": 87.2038,
+      "quality_grade": "Good"
+    },
+    {
+      "segment_id": 55,
+      "s_start": 1080.0,
+      "s_end": 1100.0,
+      "cell_count": 560,
+      "PCI": 10.3222,
+      "PQI_extended": 89.6778,
+      "quality_grade": "Good"
+    },
+    {
+      "segment_id": 56,
+      "s_start": 1100.0,
+      "s_end": 1120.0,
+      "cell_count": 560,
+      "PCI": 11.5156,
+      "PQI_extended": 88.4844,
+      "quality_grade": "Good"
+    },
+    {
+      "segment_id": 57,
+      "s_start": 1120.0,
+      "s_end": 1140.0,
+      "cell_count": 560,
+      "PCI": 12.3007,
+      "PQI_extended": 87.6993,
+      "quality_grade": "Good"
+    },
+    {
+      "segment_id": 58,
+      "s_start": 1140.0,
+      "s_end": 1160.0,
+      "cell_count": 560,
+      "PCI": 10.9881,
+      "PQI_extended": 89.0119,
+      "quality_grade": "Good"
+    },
+    {
+      "segment_id": 59,
+      "s_start": 1160.0,
+      "s_end": 1180.0,
+      "cell_count": 560,
+      "PCI": 14.1182,
+      "PQI_extended": 85.8818,
+      "quality_grade": "Good"
+    },
+    {
+      "segment_id": 60,
+      "s_start": 1180.0,
+      "s_end": 1200.0,
+      "cell_count": 560,
+      "PCI": 16.5605,
+      "PQI_extended": 83.4395,
+      "quality_grade": "Good"
+    },
+    {
+      "segment_id": 61,
+      "s_start": 1200.0,
+      "s_end": 1220.0,
+      "cell_count": 560,
+      "PCI": 16.7886,
+      "PQI_extended": 83.2114,
+      "quality_grade": "Good"
+    },
+    {
+      "segment_id": 62,
+      "s_start": 1220.0,
+      "s_end": 1240.0,
+      "cell_count": 560,
+      "PCI": 22.0204,
+      "PQI_extended": 77.9796,
+      "quality_grade": "Medium"
+    },
+    {
+      "segment_id": 63,
+      "s_start": 1240.0,
+      "s_end": 1260.0,
+      "cell_count": 560,
+      "PCI": 22.2087,
+      "PQI_extended": 77.7913,
+      "quality_grade": "Medium"
+    },
+    {
+      "segment_id": 64,
+      "s_start": 1260.0,
+      "s_end": 1280.0,
+      "cell_count": 560,
+      "PCI": 20.9472,
+      "PQI_extended": 79.0528,
+      "quality_grade": "Medium"
+    },
+    {
+      "segment_id": 65,
+      "s_start": 1280.0,
+      "s_end": 1300.0,
+      "cell_count": 560,
+      "PCI": 17.9329,
+      "PQI_extended": 82.0671,
+      "quality_grade": "Good"
+    },
+    {
+      "segment_id": 66,
+      "s_start": 1300.0,
+      "s_end": 1320.0,
+      "cell_count": 560,
+      "PCI": 17.2165,
+      "PQI_extended": 82.7835,
+      "quality_grade": "Good"
+    },
+    {
+      "segment_id": 67,
+      "s_start": 1320.0,
+      "s_end": 1340.0,
+      "cell_count": 560,
+      "PCI": 17.1433,
+      "PQI_extended": 82.8567,
+      "quality_grade": "Good"
+    },
+    {
+      "segment_id": 68,
+      "s_start": 1340.0,
+      "s_end": 1360.0,
+      "cell_count": 560,
+      "PCI": 23.4573,
+      "PQI_extended": 76.5427,
+      "quality_grade": "Medium"
+    },
+    {
+      "segment_id": 69,
+      "s_start": 1360.0,
+      "s_end": 1380.0,
+      "cell_count": 560,
+      "PCI": 32.9573,
+      "PQI_extended": 67.0427,
+      "quality_grade": "Poor"
+    },
+    {
+      "segment_id": 70,
+      "s_start": 1380.0,
+      "s_end": 1400.0,
+      "cell_count": 560,
+      "PCI": 31.7745,
+      "PQI_extended": 68.2255,
+      "quality_grade": "Poor"
+    },
+    {
+      "segment_id": 71,
+      "s_start": 1400.0,
+      "s_end": 1420.0,
+      "cell_count": 560,
+      "PCI": 28.4751,
+      "PQI_extended": 71.5249,
+      "quality_grade": "Medium"
+    },
+    {
+      "segment_id": 72,
+      "s_start": 1420.0,
+      "s_end": 1440.0,
+      "cell_count": 560,
+      "PCI": 28.1171,
+      "PQI_extended": 71.8829,
+      "quality_grade": "Medium"
+    },
+    {
+      "segment_id": 73,
+      "s_start": 1440.0,
+      "s_end": 1460.0,
+      "cell_count": 560,
+      "PCI": 27.4469,
+      "PQI_extended": 72.5531,
+      "quality_grade": "Medium"
+    },
+    {
+      "segment_id": 74,
+      "s_start": 1460.0,
+      "s_end": 1480.0,
+      "cell_count": 560,
+      "PCI": 34.0648,
+      "PQI_extended": 65.9352,
+      "quality_grade": "Poor"
+    },
+    {
+      "segment_id": 75,
+      "s_start": 1480.0,
+      "s_end": 1500.0,
+      "cell_count": 560,
+      "PCI": 37.7013,
+      "PQI_extended": 62.2987,
+      "quality_grade": "Poor"
+    },
+    {
+      "segment_id": 76,
+      "s_start": 1500.0,
+      "s_end": 1520.0,
+      "cell_count": 560,
+      "PCI": 36.5573,
+      "PQI_extended": 63.4427,
+      "quality_grade": "Poor"
+    },
+    {
+      "segment_id": 77,
+      "s_start": 1520.0,
+      "s_end": 1540.0,
+      "cell_count": 560,
+      "PCI": 34.555,
+      "PQI_extended": 65.445,
+      "quality_grade": "Poor"
+    },
+    {
+      "segment_id": 78,
+      "s_start": 1540.0,
+      "s_end": 1560.0,
+      "cell_count": 560,
+      "PCI": 38.9691,
+      "PQI_extended": 61.0309,
+      "quality_grade": "Poor"
+    },
+    {
+      "segment_id": 79,
+      "s_start": 1560.0,
+      "s_end": 1580.0,
+      "cell_count": 560,
+      "PCI": 39.3108,
+      "PQI_extended": 60.6892,
+      "quality_grade": "Poor"
+    },
+    {
+      "segment_id": 80,
+      "s_start": 1580.0,
+      "s_end": 1600.0,
+      "cell_count": 560,
+      "PCI": 29.8108,
+      "PQI_extended": 70.1892,
+      "quality_grade": "Medium"
+    },
+    {
+      "segment_id": 81,
+      "s_start": 1600.0,
+      "s_end": 1620.0,
+      "cell_count": 560,
+      "PCI": 33.5261,
+      "PQI_extended": 66.4739,
+      "quality_grade": "Poor"
+    },
+    {
+      "segment_id": 82,
+      "s_start": 1620.0,
+      "s_end": 1640.0,
+      "cell_count": 560,
+      "PCI": 28.4309,
+      "PQI_extended": 71.5691,
+      "quality_grade": "Medium"
+    },
+    {
+      "segment_id": 83,
+      "s_start": 1640.0,
+      "s_end": 1660.0,
+      "cell_count": 560,
+      "PCI": 26.5875,
+      "PQI_extended": 73.4125,
+      "quality_grade": "Medium"
+    },
+    {
+      "segment_id": 84,
+      "s_start": 1660.0,
+      "s_end": 1680.0,
+      "cell_count": 560,
+      "PCI": 23.8122,
+      "PQI_extended": 76.1878,
+      "quality_grade": "Medium"
+    },
+    {
+      "segment_id": 85,
+      "s_start": 1680.0,
+      "s_end": 1700.0,
+      "cell_count": 560,
+      "PCI": 24.2379,
+      "PQI_extended": 75.7621,
+      "quality_grade": "Medium"
+    },
+    {
+      "segment_id": 86,
+      "s_start": 1700.0,
+      "s_end": 1720.0,
+      "cell_count": 560,
+      "PCI": 15.0581,
+      "PQI_extended": 84.9419,
+      "quality_grade": "Good"
+    },
+    {
+      "segment_id": 87,
+      "s_start": 1720.0,
+      "s_end": 1740.0,
+      "cell_count": 560,
+      "PCI": 11.6467,
+      "PQI_extended": 88.3533,
+      "quality_grade": "Good"
+    },
+    {
+      "segment_id": 88,
+      "s_start": 1740.0,
+      "s_end": 1760.0,
+      "cell_count": 560,
+      "PCI": 9.3427,
+      "PQI_extended": 90.6573,
+      "quality_grade": "Excellent"
+    },
+    {
+      "segment_id": 89,
+      "s_start": 1760.0,
+      "s_end": 1780.0,
+      "cell_count": 560,
+      "PCI": 8.4398,
+      "PQI_extended": 91.5602,
+      "quality_grade": "Excellent"
+    },
+    {
+      "segment_id": 90,
+      "s_start": 1780.0,
+      "s_end": 1800.0,
+      "cell_count": 560,
+      "PCI": 11.2042,
+      "PQI_extended": 88.7958,
+      "quality_grade": "Good"
+    },
+    {
+      "segment_id": 91,
+      "s_start": 1800.0,
+      "s_end": 1820.0,
+      "cell_count": 560,
+      "PCI": 13.4317,
+      "PQI_extended": 86.5683,
+      "quality_grade": "Good"
+    },
+    {
+      "segment_id": 92,
+      "s_start": 1820.0,
+      "s_end": 1840.0,
+      "cell_count": 560,
+      "PCI": 12.664,
+      "PQI_extended": 87.336,
+      "quality_grade": "Good"
+    },
+    {
+      "segment_id": 93,
+      "s_start": 1840.0,
+      "s_end": 1860.0,
+      "cell_count": 560,
+      "PCI": 13.6241,
+      "PQI_extended": 86.3759,
+      "quality_grade": "Good"
+    },
+    {
+      "segment_id": 94,
+      "s_start": 1860.0,
+      "s_end": 1880.0,
+      "cell_count": 560,
+      "PCI": 14.7155,
+      "PQI_extended": 85.2845,
+      "quality_grade": "Good"
+    },
+    {
+      "segment_id": 95,
+      "s_start": 1880.0,
+      "s_end": 1900.0,
+      "cell_count": 560,
+      "PCI": 15.5249,
+      "PQI_extended": 84.4751,
+      "quality_grade": "Good"
+    },
+    {
+      "segment_id": 96,
+      "s_start": 1900.0,
+      "s_end": 1920.0,
+      "cell_count": 560,
+      "PCI": 16.6774,
+      "PQI_extended": 83.3226,
+      "quality_grade": "Good"
+    },
+    {
+      "segment_id": 97,
+      "s_start": 1920.0,
+      "s_end": 1940.0,
+      "cell_count": 560,
+      "PCI": 16.8107,
+      "PQI_extended": 83.1893,
+      "quality_grade": "Good"
+    },
+    {
+      "segment_id": 98,
+      "s_start": 1940.0,
+      "s_end": 1960.0,
+      "cell_count": 560,
+      "PCI": 17.7706,
+      "PQI_extended": 82.2294,
+      "quality_grade": "Good"
+    },
+    {
+      "segment_id": 99,
+      "s_start": 1960.0,
+      "s_end": 1980.0,
+      "cell_count": 560,
+      "PCI": 18.0551,
+      "PQI_extended": 81.9449,
+      "quality_grade": "Good"
+    },
+    {
+      "segment_id": 100,
+      "s_start": 1980.0,
+      "s_end": 2000.0,
+      "cell_count": 560,
+      "PCI": 22.653,
+      "PQI_extended": 77.347,
+      "quality_grade": "Medium"
+    },
+    {
+      "segment_id": 101,
+      "s_start": 2000.0,
+      "s_end": 2020.0,
+      "cell_count": 560,
+      "PCI": 22.7909,
+      "PQI_extended": 77.2091,
+      "quality_grade": "Medium"
+    },
+    {
+      "segment_id": 102,
+      "s_start": 2020.0,
+      "s_end": 2040.0,
+      "cell_count": 560,
+      "PCI": 25.9846,
+      "PQI_extended": 74.0154,
+      "quality_grade": "Medium"
+    },
+    {
+      "segment_id": 103,
+      "s_start": 2040.0,
+      "s_end": 2060.0,
+      "cell_count": 560,
+      "PCI": 27.295,
+      "PQI_extended": 72.705,
+      "quality_grade": "Medium"
+    },
+    {
+      "segment_id": 104,
+      "s_start": 2060.0,
+      "s_end": 2080.0,
+      "cell_count": 560,
+      "PCI": 25.3041,
+      "PQI_extended": 74.6959,
+      "quality_grade": "Medium"
+    },
+    {
+      "segment_id": 105,
+      "s_start": 2080.0,
+      "s_end": 2100.0,
+      "cell_count": 560,
+      "PCI": 21.663,
+      "PQI_extended": 78.337,
+      "quality_grade": "Medium"
+    },
+    {
+      "segment_id": 106,
+      "s_start": 2100.0,
+      "s_end": 2120.0,
+      "cell_count": 560,
+      "PCI": 18.3508,
+      "PQI_extended": 81.6492,
+      "quality_grade": "Good"
+    },
+    {
+      "segment_id": 107,
+      "s_start": 2120.0,
+      "s_end": 2140.0,
+      "cell_count": 560,
+      "PCI": 15.2711,
+      "PQI_extended": 84.7289,
+      "quality_grade": "Good"
+    },
+    {
+      "segment_id": 108,
+      "s_start": 2140.0,
+      "s_end": 2160.0,
+      "cell_count": 560,
+      "PCI": 12.7199,
+      "PQI_extended": 87.2801,
+      "quality_grade": "Good"
+    },
+    {
+      "segment_id": 109,
+      "s_start": 2160.0,
+      "s_end": 2180.0,
+      "cell_count": 560,
+      "PCI": 11.413,
+      "PQI_extended": 88.587,
+      "quality_grade": "Good"
+    },
+    {
+      "segment_id": 110,
+      "s_start": 2180.0,
+      "s_end": 2200.0,
+      "cell_count": 560,
+      "PCI": 12.3839,
+      "PQI_extended": 87.6161,
+      "quality_grade": "Good"
+    },
+    {
+      "segment_id": 111,
+      "s_start": 2200.0,
+      "s_end": 2220.0,
+      "cell_count": 560,
+      "PCI": 13.2105,
+      "PQI_extended": 86.7895,
+      "quality_grade": "Good"
+    },
+    {
+      "segment_id": 112,
+      "s_start": 2220.0,
+      "s_end": 2240.0,
+      "cell_count": 560,
+      "PCI": 15.2373,
+      "PQI_extended": 84.7627,
+      "quality_grade": "Good"
+    },
+    {
+      "segment_id": 113,
+      "s_start": 2240.0,
+      "s_end": 2260.0,
+      "cell_count": 560,
+      "PCI": 17.3454,
+      "PQI_extended": 82.6546,
+      "quality_grade": "Good"
+    },
+    {
+      "segment_id": 114,
+      "s_start": 2260.0,
+      "s_end": 2280.0,
+      "cell_count": 560,
+      "PCI": 24.9205,
+      "PQI_extended": 75.0795,
+      "quality_grade": "Medium"
+    },
+    {
+      "segment_id": 115,
+      "s_start": 2280.0,
+      "s_end": 2300.0,
+      "cell_count": 560,
+      "PCI": 30.7031,
+      "PQI_extended": 69.2969,
+      "quality_grade": "Poor"
+    },
+    {
+      "segment_id": 116,
+      "s_start": 2300.0,
+      "s_end": 2320.0,
+      "cell_count": 560,
+      "PCI": 35.1152,
+      "PQI_extended": 64.8848,
+      "quality_grade": "Poor"
+    },
+    {
+      "segment_id": 117,
+      "s_start": 2320.0,
+      "s_end": 2340.0,
+      "cell_count": 560,
+      "PCI": 36.7394,
+      "PQI_extended": 63.2606,
+      "quality_grade": "Poor"
+    },
+    {
+      "segment_id": 118,
+      "s_start": 2340.0,
+      "s_end": 2360.0,
+      "cell_count": 560,
+      "PCI": 38.3305,
+      "PQI_extended": 61.6695,
+      "quality_grade": "Poor"
+    },
+    {
+      "segment_id": 119,
+      "s_start": 2360.0,
+      "s_end": 2380.0,
+      "cell_count": 560,
+      "PCI": 31.1759,
+      "PQI_extended": 68.8241,
+      "quality_grade": "Poor"
+    },
+    {
+      "segment_id": 120,
+      "s_start": 2380.0,
+      "s_end": 2400.0,
+      "cell_count": 560,
+      "PCI": 28.9268,
+      "PQI_extended": 71.0732,
+      "quality_grade": "Medium"
+    },
+    {
+      "segment_id": 121,
+      "s_start": 2400.0,
+      "s_end": 2420.0,
+      "cell_count": 560,
+      "PCI": 33.4735,
+      "PQI_extended": 66.5265,
+      "quality_grade": "Poor"
+    },
+    {
+      "segment_id": 122,
+      "s_start": 2420.0,
+      "s_end": 2440.0,
+      "cell_count": 560,
+      "PCI": 25.5885,
+      "PQI_extended": 74.4115,
+      "quality_grade": "Medium"
+    },
+    {
+      "segment_id": 123,
+      "s_start": 2440.0,
+      "s_end": 2460.0,
+      "cell_count": 560,
+      "PCI": 24.2999,
+      "PQI_extended": 75.7001,
+      "quality_grade": "Medium"
+    },
+    {
+      "segment_id": 124,
+      "s_start": 2460.0,
+      "s_end": 2480.0,
+      "cell_count": 560,
+      "PCI": 18.755,
+      "PQI_extended": 81.245,
+      "quality_grade": "Good"
+    },
+    {
+      "segment_id": 125,
+      "s_start": 2480.0,
+      "s_end": 2500.0,
+      "cell_count": 560,
+      "PCI": 23.5388,
+      "PQI_extended": 76.4612,
+      "quality_grade": "Medium"
+    },
+    {
+      "segment_id": 126,
+      "s_start": 2500.0,
+      "s_end": 2520.0,
+      "cell_count": 560,
+      "PCI": 27.8144,
+      "PQI_extended": 72.1856,
+      "quality_grade": "Medium"
+    },
+    {
+      "segment_id": 127,
+      "s_start": 2520.0,
+      "s_end": 2540.0,
+      "cell_count": 560,
+      "PCI": 32.4013,
+      "PQI_extended": 67.5987,
+      "quality_grade": "Poor"
+    },
+    {
+      "segment_id": 128,
+      "s_start": 2540.0,
+      "s_end": 2560.0,
+      "cell_count": 560,
+      "PCI": 27.6996,
+      "PQI_extended": 72.3004,
+      "quality_grade": "Medium"
+    },
+    {
+      "segment_id": 129,
+      "s_start": 2560.0,
+      "s_end": 2580.0,
+      "cell_count": 560,
+      "PCI": 26.6893,
+      "PQI_extended": 73.3107,
+      "quality_grade": "Medium"
+    },
+    {
+      "segment_id": 130,
+      "s_start": 2580.0,
+      "s_end": 2600.0,
+      "cell_count": 560,
+      "PCI": 24.7771,
+      "PQI_extended": 75.2229,
+      "quality_grade": "Medium"
+    },
+    {
+      "segment_id": 131,
+      "s_start": 2600.0,
+      "s_end": 2620.0,
+      "cell_count": 560,
+      "PCI": 21.8489,
+      "PQI_extended": 78.1511,
+      "quality_grade": "Medium"
+    },
+    {
+      "segment_id": 132,
+      "s_start": 2620.0,
+      "s_end": 2640.0,
+      "cell_count": 560,
+      "PCI": 15.8476,
+      "PQI_extended": 84.1524,
+      "quality_grade": "Good"
+    },
+    {
+      "segment_id": 133,
+      "s_start": 2640.0,
+      "s_end": 2660.0,
+      "cell_count": 560,
+      "PCI": 11.8463,
+      "PQI_extended": 88.1537,
+      "quality_grade": "Good"
+    },
+    {
+      "segment_id": 134,
+      "s_start": 2660.0,
+      "s_end": 2680.0,
+      "cell_count": 560,
+      "PCI": 8.9945,
+      "PQI_extended": 91.0055,
+      "quality_grade": "Excellent"
+    },
+    {
+      "segment_id": 135,
+      "s_start": 2680.0,
+      "s_end": 2700.0,
+      "cell_count": 560,
+      "PCI": 8.2725,
+      "PQI_extended": 91.7275,
+      "quality_grade": "Excellent"
+    },
+    {
+      "segment_id": 136,
+      "s_start": 2700.0,
+      "s_end": 2720.0,
+      "cell_count": 560,
+      "PCI": 8.3275,
+      "PQI_extended": 91.6725,
+      "quality_grade": "Excellent"
+    },
+    {
+      "segment_id": 137,
+      "s_start": 2720.0,
+      "s_end": 2740.0,
+      "cell_count": 560,
+      "PCI": 8.3762,
+      "PQI_extended": 91.6238,
+      "quality_grade": "Excellent"
+    },
+    {
+      "segment_id": 138,
+      "s_start": 2740.0,
+      "s_end": 2760.0,
+      "cell_count": 560,
+      "PCI": 8.2356,
+      "PQI_extended": 91.7644,
+      "quality_grade": "Excellent"
+    },
+    {
+      "segment_id": 139,
+      "s_start": 2760.0,
+      "s_end": 2780.0,
+      "cell_count": 560,
+      "PCI": 7.4893,
+      "PQI_extended": 92.5107,
+      "quality_grade": "Excellent"
+    },
+    {
+      "segment_id": 140,
+      "s_start": 2780.0,
+      "s_end": 2800.0,
+      "cell_count": 560,
+      "PCI": 8.6167,
+      "PQI_extended": 91.3833,
+      "quality_grade": "Excellent"
+    },
+    {
+      "segment_id": 141,
+      "s_start": 2800.0,
+      "s_end": 2820.0,
+      "cell_count": 560,
+      "PCI": 8.767,
+      "PQI_extended": 91.233,
+      "quality_grade": "Excellent"
+    },
+    {
+      "segment_id": 142,
+      "s_start": 2820.0,
+      "s_end": 2840.0,
+      "cell_count": 560,
+      "PCI": 12.3008,
+      "PQI_extended": 87.6992,
+      "quality_grade": "Good"
+    },
+    {
+      "segment_id": 143,
+      "s_start": 2840.0,
+      "s_end": 2860.0,
+      "cell_count": 560,
+      "PCI": 14.4206,
+      "PQI_extended": 85.5794,
+      "quality_grade": "Good"
+    },
+    {
+      "segment_id": 144,
+      "s_start": 2860.0,
+      "s_end": 2880.0,
+      "cell_count": 560,
+      "PCI": 16.0885,
+      "PQI_extended": 83.9115,
+      "quality_grade": "Good"
+    },
+    {
+      "segment_id": 145,
+      "s_start": 2880.0,
+      "s_end": 2900.0,
+      "cell_count": 560,
+      "PCI": 14.581,
+      "PQI_extended": 85.419,
+      "quality_grade": "Good"
+    },
+    {
+      "segment_id": 146,
+      "s_start": 2900.0,
+      "s_end": 2920.0,
+      "cell_count": 560,
+      "PCI": 14.053,
+      "PQI_extended": 85.947,
+      "quality_grade": "Good"
+    },
+    {
+      "segment_id": 147,
+      "s_start": 2920.0,
+      "s_end": 2940.0,
+      "cell_count": 560,
+      "PCI": 9.0667,
+      "PQI_extended": 90.9333,
+      "quality_grade": "Excellent"
+    },
+    {
+      "segment_id": 148,
+      "s_start": 2940.0,
+      "s_end": 2960.0,
+      "cell_count": 560,
+      "PCI": 7.707,
+      "PQI_extended": 92.293,
+      "quality_grade": "Excellent"
+    },
+    {
+      "segment_id": 149,
+      "s_start": 2960.0,
+      "s_end": 2980.0,
+      "cell_count": 560,
+      "PCI": 7.4624,
+      "PQI_extended": 92.5376,
+      "quality_grade": "Excellent"
+    },
+    {
+      "segment_id": 150,
+      "s_start": 2980.0,
+      "s_end": 3000.0,
+      "cell_count": 560,
+      "PCI": 6.3592,
+      "PQI_extended": 93.6408,
+      "quality_grade": "Excellent"
+    },
+    {
+      "segment_id": 151,
+      "s_start": 3000.0,
+      "s_end": 3020.0,
+      "cell_count": 560,
+      "PCI": 6.1472,
+      "PQI_extended": 93.8528,
+      "quality_grade": "Excellent"
+    },
+    {
+      "segment_id": 152,
+      "s_start": 3020.0,
+      "s_end": 3040.0,
+      "cell_count": 560,
+      "PCI": 5.7659,
+      "PQI_extended": 94.2341,
+      "quality_grade": "Excellent"
+    },
+    {
+      "segment_id": 153,
+      "s_start": 3040.0,
+      "s_end": 3060.0,
+      "cell_count": 560,
+      "PCI": 5.6975,
+      "PQI_extended": 94.3025,
+      "quality_grade": "Excellent"
+    },
+    {
+      "segment_id": 154,
+      "s_start": 3060.0,
+      "s_end": 3080.0,
+      "cell_count": 560,
+      "PCI": 5.7309,
+      "PQI_extended": 94.2691,
+      "quality_grade": "Excellent"
+    },
+    {
+      "segment_id": 155,
+      "s_start": 3080.0,
+      "s_end": 3100.0,
+      "cell_count": 560,
+      "PCI": 6.0808,
+      "PQI_extended": 93.9192,
+      "quality_grade": "Excellent"
+    },
+    {
+      "segment_id": 156,
+      "s_start": 3100.0,
+      "s_end": 3120.0,
+      "cell_count": 560,
+      "PCI": 7.063,
+      "PQI_extended": 92.937,
+      "quality_grade": "Excellent"
+    },
+    {
+      "segment_id": 157,
+      "s_start": 3120.0,
+      "s_end": 3140.0,
+      "cell_count": 560,
+      "PCI": 7.432,
+      "PQI_extended": 92.568,
+      "quality_grade": "Excellent"
+    },
+    {
+      "segment_id": 158,
+      "s_start": 3140.0,
+      "s_end": 3160.0,
+      "cell_count": 560,
+      "PCI": 7.0783,
+      "PQI_extended": 92.9217,
+      "quality_grade": "Excellent"
+    },
+    {
+      "segment_id": 159,
+      "s_start": 3160.0,
+      "s_end": 3180.0,
+      "cell_count": 560,
+      "PCI": 7.0063,
+      "PQI_extended": 92.9937,
+      "quality_grade": "Excellent"
+    },
+    {
+      "segment_id": 160,
+      "s_start": 3180.0,
+      "s_end": 3200.0,
+      "cell_count": 560,
+      "PCI": 6.6159,
+      "PQI_extended": 93.3841,
+      "quality_grade": "Excellent"
+    },
+    {
+      "segment_id": 161,
+      "s_start": 3200.0,
+      "s_end": 3220.0,
+      "cell_count": 560,
+      "PCI": 5.8524,
+      "PQI_extended": 94.1476,
+      "quality_grade": "Excellent"
+    }
+  ],
+  "overall_stats": {
+    "PQI_extended": {
+      "mean": 85.0442,
+      "min": 60.6892,
+      "max": 99.0886,
+      "std": 10.2839
+    },
+    "PCI": {
+      "mean": 14.9558,
+      "min": 0.9114,
+      "max": 39.3108,
+      "std": 10.2839
+    },
+    "grade_distribution": {
+      "Excellent": 65,
+      "Good": 48,
+      "Medium": 32,
+      "Poor": 16,
+      "Very poor": 0
+    },
+    "n_segments": 161,
+    "pavement_only": true
+  },
+  "method_note": "Pavement-only quality assessment based on distress grid cells."
 }

@@ -1,4 +1,4 @@
-"""PG-PDN public demonstration package."""
+"""PG-PDN package."""
 
 from .constants import FEATURE_COLUMNS
 from .features import load_feature_table, validate_feature_table
