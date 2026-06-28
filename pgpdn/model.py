@@ -10,8 +10,8 @@ Chapter:
     Manuscript subsection: Physics-guided pavement degradation prediction network.
 
 Notes:
-    This file provides architecture code only. No trained weights from the
-    raw field data are included in the public package.
+    This file provides the public architecture and tensor interface used by
+    the demonstration package.
 """
 
 from __future__ import annotations

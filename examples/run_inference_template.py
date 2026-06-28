@@ -1,8 +1,8 @@
 """Run PG-PDN inference on a public feature-schema table.
 
 This script uses initialized model parameters unless a user supplies their own
-checkpoint in downstream work. It is a schema and architecture demonstration,
-not a reproduction of the restricted-data results in the manuscript.
+checkpoint in downstream work. It is a schema and architecture demonstration
+for checking the public PG-PDN data flow.
 """
 
 from __future__ import annotations

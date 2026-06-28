@@ -268,7 +268,7 @@ def get_prediction(route_id: str):
             "comparison": comparison,
             "model": {
                 "name": "PG-PDN",
-                "release_policy": "PG-PDN trained on the three-route survey dataset.",
+                "release_policy": "PaveVision serves the included precomputed PG-PDN route outputs.",
             },
         }
     )
@@ -335,7 +335,7 @@ def get_model_params():
             "loss_weights": {"lambda_prediction": 1.0, "lambda_nonnegative": 0.5, "lambda_smoothness": 0.1},
             "physics_ratio": 78.3,
             "data_ratio": 21.7,
-            "model_release": "PG-PDN trained on the three-route survey dataset.",
+            "model_release": "Included precomputed PG-PDN route outputs are used for the prediction view.",
         }
     )
 

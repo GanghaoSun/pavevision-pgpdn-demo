@@ -1,6 +1,6 @@
 # Supplementary Methods: Public PG-PDN Demonstration
 
-This note documents the public implementation scope for the PG-PDN demonstration package. It is intended to help readers inspect the model structure and reproduce the assessment and prediction workflow.
+This note documents the public implementation scope for the PG-PDN demonstration package. It is intended to help readers inspect the model structure, data interfaces and assessment-to-prediction workflow.
 
 ## S1. Feature Vector
 
@@ -19,7 +19,7 @@ PG-PDN contains two branches:
 - Physical branch: an interpretable non-negative deterioration-rate function initialized from engineering knowledge and clipped within +/-50% of its initial parameters during training.
 - GRU residual branch: a single-layer GRU with hidden dimension 16 and dropout 0.1. It receives `[PQI*, D1, D2, D3, D4, I_mean, I_std, I_low]` and predicts a residual correction.
 
-The predicted deterioration is the sum of the physical deterioration and the residual correction. The public implementation exposes this architecture but does not include trained weights.
+The predicted deterioration is the sum of the physical deterioration and the residual correction. The public implementation exposes the architecture, tensor interface and prediction components used by the demonstration package.
 
 ## S3. Loss Function
 
@@ -39,6 +39,6 @@ The public visualization functions support:
 - Residual maps when user-supplied predictions are available.
 - Figure templates for manuscript-style outputs.
 
-The repository also includes a browser-based PaveVision web demo under `web_demo/`. Its frontend layout follows the manuscript system interface, while the backend serves the processed pavement quality data and precomputed PG-PDN outputs for the three routes. The upstream raw point clouds and perception pipeline are developed as separate work and will be added after acceptance.
+The repository also includes a browser-based PaveVision web demo under `web_demo/`. Its frontend layout follows the manuscript system interface, while the backend serves the processed pavement quality data and precomputed PG-PDN outputs for the three routes.
 
 The standalone sample figures in `assets/` illustrate the manuscript-style visualization workflow. They should not be interpreted as an additional validation dataset beyond the experiments reported in the manuscript.

@@ -1,32 +1,27 @@
 # Data and Model Release Statement
 
-This repository is released in stages alongside the associated manuscript.
+This repository provides the public software and demonstration materials associated with the manuscript "Physics-guided pavement degradation prediction from grid-level semantic distress maps".
 
-## Currently Released
+## Released Materials
 
 - PG-PDN source code and configuration files.
-- Processed pavement quality data for all three surveyed routes at their full
-  length (about 5.40 km in total), covering the 0.5 m grid-level and 20 m
-  maintenance-unit assessments for the three survey periods.
+- Processed pavement quality data for all three surveyed routes at their full length (about 5.40 km in total), covering the 0.5 m grid-level and 20 m maintenance-unit assessment views for three survey periods.
 - Precomputed PG-PDN prediction outputs used by the PaveVision web system.
-- The PaveVision web system (front-end and back-end).
-- Feature-schema templates.
+- The PaveVision web system, including front-end pages and Flask API endpoints.
+- Feature-schema templates and a synthetic feature table for interface checks.
 - Figure-generation utilities and plotting templates.
-- Supplementary method notes.
+- Supplementary method notes and public workflow documentation.
 
-## Planned Additions
+## Reproducible Public Workflow
 
-The repository will be updated progressively as the manuscript advances through
-peer review and publication. Materials to be added after acceptance include
-extended documentation and reproducibility examples, together with the upstream
-multi-sensor perception resources (raw point clouds, images and the segmentation
-pipeline), which are developed as separate work and are therefore not part of the
-current release.
+The repository supports the following checks directly from the files in this package:
+
+1. Inspect the PG-PDN model equations, feature order and loss terms.
+2. Run the web demo and review route-level quality assessment and prediction views.
+3. Load processed 0.5 m grid-level and 20 m maintenance-unit JSON files.
+4. Run the synthetic feature-table example through the public PG-PDN interface.
+5. Execute the unit tests to verify imports, endpoints, manifest consistency and public-facing documentation text.
 
 ## Notes
 
-The processed data and code released here allow readers to inspect the model
-equations, the software interfaces and the complete quality-assessment and
-degradation-prediction workflow, and to reproduce the manuscript's grid-level and
-unit-level results. The PaveVision prediction view reads the precomputed PG-PDN
-outputs for the three routes.
+The processed data and code released here allow readers to inspect the model equations, the software interfaces and the quality-assessment and degradation-prediction workflow. The PaveVision prediction view reads the precomputed PG-PDN outputs for the three routes.
