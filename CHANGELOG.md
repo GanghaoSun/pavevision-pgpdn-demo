@@ -2,6 +2,7 @@
 
 ## 2026-06-28
 
+- Added the CI badge to the README, documented expected command outputs and cleaned the public package test logs.
 - Refined README and supplementary release statements so public pages focus on the materials available in this repository.
 - Added documentation pages for the public workflow, data schema and manuscript-to-code mapping.
 - Added `CITATION.cff` for citation metadata.

@@ -66,7 +66,6 @@ class WebDemoDataTest(unittest.TestCase):
             self.assertTrue((sample_dir / name).is_file(), name)
 
     def test_api_endpoints(self) -> None:
-        client = app.test_client()
         urls = [
             "/",
             "/api/config",
@@ -78,12 +77,22 @@ class WebDemoDataTest(unittest.TestCase):
             "/api/weather",
             "/api/model_params",
         ]
-        for url in urls:
-            response = client.get(url)
-            self.assertEqual(response.status_code, 200, url)
+        with app.test_client() as client:
+            for url in urls:
+                response = client.get(url)
+                try:
+                    self.assertEqual(response.status_code, 200, url)
+                    response.get_data()
+                finally:
+                    response.close()
 
     def test_route_labels_match_manuscript_terms(self) -> None:
-        payload = app.test_client().get("/api/config").get_json()
+        with app.test_client() as client:
+            response = client.get("/api/config")
+            try:
+                payload = response.get_json()
+            finally:
+                response.close()
         labels = {route["id"]: route["description"] for route in payload["routes"]}
         self.assertEqual(labels["route1"], "Suburban closed-loop route")
         self.assertEqual(labels["route2"], "Urban lane-changing route")

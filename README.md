@@ -1,5 +1,7 @@
 # PaveVision PG-PDN Demonstration Package
 
+[![CI](https://github.com/GanghaoSun/pavevision-pgpdn-demo/actions/workflows/ci.yml/badge.svg)](https://github.com/GanghaoSun/pavevision-pgpdn-demo/actions/workflows/ci.yml)
+
 This repository accompanies the manuscript "Physics-guided pavement degradation prediction from grid-level semantic distress maps".
 
 It is the public software and demonstration package for inspecting the PG-PDN model structure, the PaveVision visualization workflow and the processed route-level outputs used by the browser demo. The repository is organized so that readers can run the web system, inspect the feature schema, execute the model architecture on a synthetic table, and review the manuscript-aligned visualizations without external project files.

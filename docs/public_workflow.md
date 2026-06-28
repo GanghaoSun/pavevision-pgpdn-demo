@@ -17,6 +17,14 @@ python -m unittest discover -s tests
 
 The tests check package imports, model tensor outputs, web API endpoints, manifest consistency and public-facing documentation text.
 
+Expected terminal summary:
+
+```text
+Ran 5 tests
+
+OK
+```
+
 ## 3. Start PaveVision
 
 ```bash
@@ -42,3 +50,10 @@ python examples/run_inference_template.py --features sample_data/synthetic_grid_
 ```
 
 This verifies the CSV schema, constructs a PG-PDN model instance and writes demonstration predictions to `outputs/synthetic_predictions.csv`.
+
+Expected terminal output includes:
+
+```text
+Wrote demonstration predictions to outputs/synthetic_predictions.csv
+These outputs use initialized parameters only and are not calibrated field predictions.
+```
