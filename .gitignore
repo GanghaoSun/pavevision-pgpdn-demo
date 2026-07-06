@@ -19,5 +19,5 @@ checkpoints/
 *.jpeg
 *.png
 !assets/
-!assets/pgpdn_architecture.png
+!assets/*.png
 !outputs/.gitkeep

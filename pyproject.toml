@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "pavevision-pgpdn-demo"
 version = "0.1.0"
-description = "PG-PDN method implementation for pavement degradation prediction."
+description = "Public demonstration code for PG-PDN pavement degradation prediction."
 readme = "README.md"
 license = {text = "MIT"}
 requires-python = ">=3.9"

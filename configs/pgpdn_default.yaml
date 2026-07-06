@@ -25,13 +25,9 @@ loss:
   lambda_neg: 0.5
   lambda_smooth: 0.1
 
-method_scope:
-  includes_pgpdn_architecture: true
-  includes_physical_branch: true
-  includes_residual_branch: true
-  includes_composite_loss: true
-  includes_feature_contract: true
-  includes_reference_configuration: true
-  includes_route_records: false
-  includes_grid_outputs: false
-  includes_field_survey_tables: false
+public_release:
+  includes_processed_route_quality_json: true
+  includes_precomputed_pgpdn_outputs: true
+  includes_web_demo: true
+  includes_feature_schema: true
+  includes_synthetic_demo_records: true

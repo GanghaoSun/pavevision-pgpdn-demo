@@ -1,16 +1,22 @@
-# Manuscript-to-Repository Mapping
+# Manuscript-to-Code Mapping
 
-This page maps the main manuscript components to repository files that support method-level inspection.
+This page maps the main manuscript components to the public repository files.
 
 | Manuscript component | Repository files |
 | --- | --- |
-| Section 3 method scope | `docs/method_scope.md` |
-| PG-PDN feature vector | `pgpdn/constants.py`, `pgpdn/features.py`, `docs/input_contract.md` |
+| PG-PDN feature vector | `pgpdn/constants.py`, `pgpdn/features.py`, `docs/data_schema.md` |
 | Physical degradation branch | `pgpdn/model.py`, `configs/pgpdn_default.yaml` |
 | GRU residual branch | `pgpdn/model.py` |
 | Composite loss terms | `pgpdn/model.py`, `configs/pgpdn_default.yaml` |
-| Equation-to-code traceability | `docs/equation_to_code_mapping.md` |
-| PaveVision UI boundary | `pavevision_ui/README.md`, `pavevision_ui/interface_contract.md` |
-| Architecture figure | `assets/pgpdn_architecture.png` |
+| Section 3 equation-to-code mapping | `docs/equation_to_code_mapping.md` |
+| PG-PDN input/output contract | `docs/input_contract.md` |
+| Method scope and PaveVision UI boundary | `docs/method_scope.md`, `pavevision_ui/` |
+| Synthetic model-interface check | `examples/run_inference_template.py`, `sample_data/synthetic_grid_features.csv` |
+| Grid-level visualization | `pgpdn/visualization.py`, `examples/plot_synthetic_quality_map.py` |
+| PaveVision route map | `web_demo/static/index.html`, `web_demo/app.py`, `web_demo/data/route_display.json` |
+| PaveVision quality assessment | `web_demo/app.py`, `web_demo/data/sample/*.assessment.json`, `web_demo/data/sample/*.grid_0.5.json` |
+| PaveVision prediction view | `web_demo/app.py`, `web_demo/data/sample/*_predicted.*.json` |
+| Manuscript-style figures | `assets/` |
+| Public package checks | `tests/`, `.github/workflows/ci.yml` |
 
-The mapping is intended to help readers move from the manuscript description to the exact implementation files in this repository.
+The mapping is intended to help readers move from the manuscript description to the exact implementation files used by the public package.

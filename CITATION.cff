@@ -1,6 +1,6 @@
 cff-version: 1.2.0
 message: "If you use this software or adapt the PG-PDN architecture, please cite the associated manuscript."
-title: "pavevision-pgpdn-demo: PG-PDN Method Package"
+title: "PaveVision PG-PDN Demonstration Package"
 authors:
   - family-names: Sun
     given-names: Ganghao
