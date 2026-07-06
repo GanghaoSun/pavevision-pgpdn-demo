@@ -2,6 +2,8 @@
 
 ## 2026-07-06
 
+- Restored the README as a richer reviewer-facing homepage with method visuals, research-lineage links, module explanations, Section 3 mapping and inspection tables.
+- Added method-level SVG diagrams for the PG-PDN method flow, Section 3 to code mapping and PaveVision interface boundary.
 - Added `docs/equation_to_code_mapping.md` to map manuscript Section 3 equations, the physical branch, the residual branch and loss terms to exact code locations.
 - Added `docs/method_scope.md` to define the repository as a PG-PDN method implementation, configuration and interface-definition package.
 - Added `docs/input_contract.md` to specify required field names, tensor shapes, units and constraints without example records.

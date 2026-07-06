@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="430" viewBox="0 0 1200 430" role="img" aria-labelledby="title desc">
+  <title id="title">PG-PDN method flow</title>
+  <desc id="desc">A method schematic showing the PG-PDN feature contract, physical branch, residual branch, prediction outputs and interface boundary.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#364152" />
+    </marker>
+    <style>
+      .title { font: 700 24px Arial, sans-serif; fill: #182230; }
+      .label { font: 700 18px Arial, sans-serif; fill: #182230; }
+      .text { font: 14px Arial, sans-serif; fill: #364152; }
+      .small { font: 12px Arial, sans-serif; fill: #4b5565; }
+      .box { fill: #f8fafc; stroke: #cbd5e1; stroke-width: 2; rx: 14; }
+      .green { fill: #ecfdf3; stroke: #17b26a; }
+      .blue { fill: #eff8ff; stroke: #2e90fa; }
+      .purple { fill: #f4f3ff; stroke: #7a5af8; }
+      .orange { fill: #fff7ed; stroke: #f97316; }
+      .line { stroke: #364152; stroke-width: 2.4; fill: none; marker-end: url(#arrow); }
+    </style>
+  </defs>
+  <rect width="1200" height="430" fill="#ffffff"/>
+  <text x="50" y="48" class="title">PG-PDN method flow</text>
+  <text x="50" y="76" class="text">Feature contract to physical branch, residual branch, prediction outputs and PaveVision interface boundary.</text>
+
+  <rect x="55" y="125" width="245" height="170" class="box blue"/>
+  <text x="78" y="160" class="label">Input contract</text>
+  <text x="78" y="190" class="text">12 fields, shape (..., 12)</text>
+  <text x="78" y="216" class="small">PQI*, ESAL, climate</text>
+  <text x="78" y="238" class="small">distress densities</text>
+  <text x="78" y="260" class="small">LiDAR intensity descriptors</text>
+
+  <rect x="390" y="95" width="255" height="145" class="box green"/>
+  <text x="418" y="130" class="label">Physical branch</text>
+  <text x="418" y="160" class="text">Interpretable rate term</text>
+  <text x="418" y="186" class="small">traffic + climate + distress</text>
+  <text x="418" y="208" class="small">+ intensity contribution</text>
+
+  <rect x="390" y="270" width="255" height="115" class="box purple"/>
+  <text x="418" y="305" class="label">Residual branch</text>
+  <text x="418" y="335" class="text">GRU correction</text>
+  <text x="418" y="360" class="small">PQI*, distress, intensity subset</text>
+
+  <rect x="735" y="150" width="210" height="155" class="box orange"/>
+  <text x="760" y="185" class="label">PG-PDN output</text>
+  <text x="760" y="215" class="text">delta_norm</text>
+  <text x="760" y="240" class="text">delta_pqi_points</text>
+  <text x="760" y="265" class="text">next_pqi_points</text>
+
+  <rect x="1010" y="150" width="145" height="155" class="box"/>
+  <text x="1030" y="185" class="label">UI boundary</text>
+  <text x="1030" y="215" class="text">named fields</text>
+  <text x="1030" y="240" class="text">method labels</text>
+  <text x="1030" y="265" class="text">metadata</text>
+
+  <path class="line" d="M300 185 C335 178, 350 165, 388 165"/>
+  <path class="line" d="M300 235 C335 260, 350 324, 388 326"/>
+  <path class="line" d="M645 167 C680 172, 700 195, 733 205"/>
+  <path class="line" d="M645 326 C690 315, 704 270, 733 253"/>
+  <path class="line" d="M945 228 L1008 228"/>
+
+  <text x="512" y="254" class="small">physical contribution + residual correction</text>
+</svg>

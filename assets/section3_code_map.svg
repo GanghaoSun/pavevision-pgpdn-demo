@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="520" viewBox="0 0 1200 520" role="img" aria-labelledby="title desc">
+  <title id="title">Section 3 to code map</title>
+  <desc id="desc">A method schematic mapping manuscript Section 3 components to repository files.</desc>
+  <defs>
+    <style>
+      .title { font: 700 24px Arial, sans-serif; fill: #182230; }
+      .label { font: 700 17px Arial, sans-serif; fill: #182230; }
+      .text { font: 14px Arial, sans-serif; fill: #364152; }
+      .small { font: 12px Arial, sans-serif; fill: #4b5565; }
+      .left { fill: #f0f9ff; stroke: #2e90fa; stroke-width: 2; rx: 12; }
+      .right { fill: #f8fafc; stroke: #cbd5e1; stroke-width: 2; rx: 12; }
+      .line { stroke: #667085; stroke-width: 2; fill: none; }
+    </style>
+  </defs>
+  <rect width="1200" height="520" fill="#ffffff"/>
+  <text x="50" y="48" class="title">Manuscript Section 3 to repository code</text>
+  <text x="50" y="76" class="text">A reviewer can move from each method component to the exact implementation file.</text>
+
+  <rect x="70" y="120" width="320" height="62" class="left"/>
+  <text x="95" y="145" class="label">Feature vector</text>
+  <text x="95" y="168" class="small">PQI*, ESAL, climate, distress, intensity</text>
+
+  <rect x="70" y="205" width="320" height="62" class="left"/>
+  <text x="95" y="230" class="label">Physical degradation branch</text>
+  <text x="95" y="253" class="small">interpretable deterioration rate</text>
+
+  <rect x="70" y="290" width="320" height="62" class="left"/>
+  <text x="95" y="315" class="label">Residual GRU branch</text>
+  <text x="95" y="338" class="small">neural correction term</text>
+
+  <rect x="70" y="375" width="320" height="62" class="left"/>
+  <text x="95" y="400" class="label">Composite loss</text>
+  <text x="95" y="423" class="small">MAE + non-negative + smoothness</text>
+
+  <rect x="710" y="110" width="400" height="82" class="right"/>
+  <text x="735" y="138" class="label">pgpdn/constants.py + docs/input_contract.md</text>
+  <text x="735" y="164" class="text">field names, feature order, units and constraints</text>
+
+  <rect x="710" y="205" width="400" height="72" class="right"/>
+  <text x="735" y="233" class="label">pgpdn/model.py::PhysicalBranch</text>
+  <text x="735" y="258" class="text">rate equation and parameter clipping</text>
+
+  <rect x="710" y="300" width="400" height="72" class="right"/>
+  <text x="735" y="328" class="label">pgpdn/model.py::PGPDN</text>
+  <text x="735" y="353" class="text">residual inputs, GRU and final outputs</text>
+
+  <rect x="710" y="395" width="400" height="72" class="right"/>
+  <text x="735" y="423" class="label">pgpdn/model.py::PGPDNLoss</text>
+  <text x="735" y="448" class="text">separate loss components returned by name</text>
+
+  <path class="line" d="M390 151 C505 151, 590 151, 710 151"/>
+  <path class="line" d="M390 236 C505 236, 590 241, 710 241"/>
+  <path class="line" d="M390 321 C505 321, 590 336, 710 336"/>
+  <path class="line" d="M390 406 C505 406, 590 431, 710 431"/>
+
+  <text x="480" y="485" class="small">Detailed mapping: docs/equation_to_code_mapping.md</text>
+</svg>
