@@ -18,13 +18,11 @@ The UI layer is treated as a separate presentation layer. In this repository it 
 - UI panel responsibilities at a source-design level.
 - Separation between model computation and presentation.
 
-## Not Included
+## Related Public Package Files
 
-- Route records.
-- Inspection frames.
-- Point clouds.
-- Grid-output tables.
-- Server entry points.
-- Bundled visualization payloads.
+- Browser service and API endpoints: [`web_demo/`](../web_demo/)
+- Processed route-quality JSON files: [`web_demo/data/sample/`](../web_demo/data/sample/)
+- Interface screenshots and manuscript-style figures: [`assets/`](../assets/)
+- Route and feature schema documentation: [`docs/data_schema.md`](../docs/data_schema.md)
 
 See [interface_contract.md](interface_contract.md) for the UI-facing contract.

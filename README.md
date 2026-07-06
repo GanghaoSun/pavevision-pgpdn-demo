@@ -1,6 +1,6 @@
 # PaveVision PG-PDN Demonstration Package
 
-Last updated: 2026-07-06 11:24 (Asia/Shanghai).
+Last updated: 2026-07-06 15:03 (Asia/Shanghai).
 
 [![CI](https://github.com/GanghaoSun/pavevision-pgpdn-demo/actions/workflows/ci.yml/badge.svg)](https://github.com/GanghaoSun/pavevision-pgpdn-demo/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
@@ -178,7 +178,7 @@ Expected output includes:
 
 ```text
 Wrote demonstration predictions to outputs/synthetic_predictions.csv
-These outputs use initialized parameters only and are not calibrated field predictions.
+These outputs use initialized parameters for interface inspection.
 ```
 
 The synthetic example verifies the feature schema, constructs a PG-PDN model instance and writes demonstration predictions for interface inspection.

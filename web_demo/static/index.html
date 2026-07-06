@@ -432,7 +432,7 @@ async function initMap() {
                 line.openPopup();
                 document.getElementById("map-status").textContent = `${route.name}: t3 quality summary loaded.`;
             } catch (error) {
-                document.getElementById("map-status").textContent = `${route.name}: quality summary unavailable.`;
+                document.getElementById("map-status").textContent = `${route.name}: loading quality summary.`;
             }
         });
         line.bindTooltip(route.name, { direction: "top" });

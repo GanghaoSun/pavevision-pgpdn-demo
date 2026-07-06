@@ -1,6 +1,6 @@
 # Equation-to-Code Mapping
 
-This page maps manuscript Section 3 method components to repository files. It is written for code-level inspection of the PG-PDN method implementation and does not define route records or display data.
+This page maps manuscript Section 3 method components to repository files. It is written for code-level inspection of the PG-PDN method implementation, while the public route package and visualization interfaces are documented in [docs/data_schema.md](data_schema.md), [web_demo/](../web_demo/) and [README.md](../README.md).
 
 | Manuscript Section 3 item | Code location | Implementation note |
 | --- | --- | --- |

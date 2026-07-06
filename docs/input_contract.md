@@ -1,6 +1,6 @@
 # PG-PDN Input Contract
 
-This document specifies field names, tensor shapes, units and constraints for the PG-PDN method implementation. It intentionally contains no example records.
+This document specifies field names, tensor shapes, units and constraints for the PG-PDN method implementation. The public feature-table check is provided in [sample_data/synthetic_grid_features.csv](../sample_data/synthetic_grid_features.csv), and the processed PaveVision route interfaces are documented in [docs/data_schema.md](data_schema.md).
 
 ## Model Feature Tensor
 

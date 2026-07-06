@@ -24,4 +24,4 @@ This document describes the source-level interface expected between the PG-PDN m
 
 ## Separation Rule
 
-The UI layer should consume method outputs and metadata through named fields. It should not redefine PG-PDN feature order, physical-branch coefficients or loss weights.
+The UI layer consumes method outputs and metadata through named fields. The PG-PDN method layer remains the source of feature order, physical-branch coefficients and loss weights.

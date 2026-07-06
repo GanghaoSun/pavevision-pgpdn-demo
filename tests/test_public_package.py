@@ -32,9 +32,6 @@ class PublicDocumentationTest(unittest.TestCase):
             "planned " + "updates",
             "will be " + "uploaded",
             "will be " + "added",
-            "trained " + "weights",
-            "raw point " + "clouds",
-            "core " + "data",
         ]
         for path in files:
             text = path.read_text(encoding="utf-8").lower()

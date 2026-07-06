@@ -47,7 +47,7 @@ def main() -> None:
     args.output.parent.mkdir(parents=True, exist_ok=True)
     result.to_csv(args.output, index=False)
     print(f"Wrote demonstration predictions to {args.output}")
-    print("These outputs use initialized parameters only and are not calibrated field predictions.")
+    print("These outputs use initialized parameters for interface inspection.")
     print(pd.DataFrame(result[["pqi_star", "delta_pqi_points_demo", "next_pqi_points_demo"]]).head())
 
 

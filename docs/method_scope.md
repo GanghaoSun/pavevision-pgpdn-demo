@@ -1,6 +1,6 @@
 # Method Scope
 
-This repository is maintained as a method-level companion for PG-PDN.
+This page explains the PG-PDN method layer within the public PaveVision demonstration package.
 
 ## Provided
 
@@ -12,10 +12,11 @@ This repository is maintained as a method-level companion for PG-PDN.
 | Equation-to-code traceability | `docs/equation_to_code_mapping.md` |
 | Input-field contract | `docs/input_contract.md` |
 | PaveVision UI boundary | `pavevision_ui/` |
+| Public route and visualization package | `web_demo/`, `web_demo/data/sample/`, `assets/`, `docs/data_schema.md` |
 
 ## Method Boundary
 
-The repository covers the implementation of the PG-PDN method described in manuscript Section 3:
+The method layer covers the implementation of the PG-PDN method described in manuscript Section 3:
 
 - the physical degradation branch;
 - the residual GRU branch;
@@ -24,14 +25,15 @@ The repository covers the implementation of the PG-PDN method described in manus
 - the field names, tensor shapes, units and constraints expected by the method;
 - the interface boundary between the PG-PDN method layer and the PaveVision UI layer.
 
-The repository does not present route records, inspection frames, point clouds, imagery, 0.5 m grid outputs, 20 m maintenance-unit tables or field-survey measurement tables.
+The public demonstration layer provides processed route-quality JSON files, interface screenshots and manuscript-style grid figures so reviewers can inspect the assessment-to-prediction workflow alongside the PG-PDN source code.
 
 ## Intended Review Use
 
-Readers can use this repository to answer three method-coverage questions:
+Readers can use this repository to answer four method-coverage questions:
 
 1. Where is each Section 3 method component implemented?
 2. What exact tensor contract does PG-PDN expect?
 3. How are the physical branch, residual branch and loss terms connected in code?
+4. How does the PaveVision presentation layer consume PG-PDN method outputs?
 
 The recommended entry points are [docs/equation_to_code_mapping.md](equation_to_code_mapping.md), [docs/input_contract.md](input_contract.md) and [pgpdn/model.py](../pgpdn/model.py).

@@ -55,5 +55,5 @@ Expected terminal output includes:
 
 ```text
 Wrote demonstration predictions to outputs/synthetic_predictions.csv
-These outputs use initialized parameters only and are not calibrated field predictions.
+These outputs use initialized parameters for interface inspection.
 ```

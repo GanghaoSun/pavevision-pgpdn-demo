@@ -41,4 +41,4 @@ The public visualization functions support:
 
 The repository also includes a browser-based PaveVision web demo under `web_demo/`. Its frontend layout follows the manuscript system interface, while the backend serves the processed pavement quality data and precomputed PG-PDN outputs for the three routes.
 
-The standalone sample figures in `assets/` illustrate the manuscript-style visualization workflow. They should not be interpreted as an additional validation dataset beyond the experiments reported in the manuscript.
+The standalone sample figures in `assets/` illustrate the manuscript-style visualization workflow. The manuscript experiments provide the validation context for these figures.

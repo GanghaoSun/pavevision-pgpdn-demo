@@ -1,8 +1,7 @@
 """Visualization helpers for Frenet-coordinate PG-PDN inspection.
 
-The functions here are intentionally data-agnostic. They operate on tables
-with Frenet coordinates and PQI* values and do not require raw survey
-data or model weights.
+The functions operate on supplied Frenet-coordinate tables with PQI* values
+and support the public visualization workflow.
 """
 
 from __future__ import annotations
