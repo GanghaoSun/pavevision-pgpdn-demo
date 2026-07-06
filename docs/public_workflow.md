@@ -1,59 +1,28 @@
-# Public Inspection Workflow
+# Method Inspection Workflow
 
-This guide describes the checks that can be run directly from the repository.
+This page lists the method-level inspection path for readers who want to trace the manuscript method into source code.
 
-## 1. Install Dependencies
+## 1. Inspect the Method Scope
 
-```bash
-pip install -r requirements.txt
-pip install -r web_demo/requirements.txt
-```
+Start with [docs/method_scope.md](method_scope.md) to see what the repository is designed to cover.
 
-## 2. Run Automated Checks
+## 2. Trace Section 3 to Code
 
-```bash
-python -m unittest discover -s tests
-```
+Use [docs/equation_to_code_mapping.md](equation_to_code_mapping.md) to locate each PG-PDN branch, output equation and loss component.
 
-The tests check package imports, model tensor outputs, web API endpoints, manifest consistency and public-facing documentation text.
+## 3. Review the Input Contract
 
-Expected terminal summary:
+Use [docs/input_contract.md](input_contract.md) to check field names, tensor shapes, units and constraints.
 
-```text
-Ran 5 tests
+## 4. Read the Core Method Files
 
-OK
-```
+The central files are:
 
-## 3. Start PaveVision
+- [pgpdn/model.py](../pgpdn/model.py)
+- [pgpdn/constants.py](../pgpdn/constants.py)
+- [pgpdn/features.py](../pgpdn/features.py)
+- [configs/pgpdn_default.yaml](../configs/pgpdn_default.yaml)
 
-```bash
-python web_demo/app.py
-```
+## 5. Inspect the PaveVision UI Boundary
 
-Open `http://localhost:5000` and inspect the route map, pavement quality assessment and one-step-ahead prediction views.
-
-## 4. Inspect Model Inputs
-
-The public feature order is:
-
-```text
-[PQI*, ESAL, P, DeltaT, F, D1, D2, D3, D4, I_mean, I_std, I_low]
-```
-
-The Python column names are defined in `pgpdn/constants.py`.
-
-## 5. Run the Synthetic Example
-
-```bash
-python examples/run_inference_template.py --features sample_data/synthetic_grid_features.csv
-```
-
-This verifies the CSV schema, constructs a PG-PDN model instance and writes demonstration predictions to `outputs/synthetic_predictions.csv`.
-
-Expected terminal output includes:
-
-```text
-Wrote demonstration predictions to outputs/synthetic_predictions.csv
-These outputs use initialized parameters only and are not calibrated field predictions.
-```
+The UI boundary is documented in [pavevision_ui/](../pavevision_ui/). It records the intended source-level interface between the PG-PDN method layer and a PaveVision front end.

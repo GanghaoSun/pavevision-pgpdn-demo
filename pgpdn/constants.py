@@ -1,4 +1,4 @@
-"""Shared constants for the PG-PDN demonstration package."""
+"""Shared constants for the PG-PDN method package."""
 
 FEATURE_COLUMNS = [
     "pqi_star",
@@ -40,4 +40,3 @@ PHYSICAL_PARAMETER_DEFAULTS = {
     "beta4": 0.0150,
     "gamma": 0.0100,
 }
-

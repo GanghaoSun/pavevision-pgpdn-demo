@@ -22,7 +22,7 @@ from .constants import FEATURE_COLUMNS
 
 
 def validate_feature_table(frame: pd.DataFrame, columns: Iterable[str] = FEATURE_COLUMNS) -> None:
-    """Validate that a feature table follows the public PG-PDN schema."""
+    """Validate that a feature table follows the PG-PDN input contract."""
     missing = [name for name in columns if name not in frame.columns]
     if missing:
         raise ValueError(f"Missing required feature columns: {missing}")
@@ -33,10 +33,20 @@ def validate_feature_table(frame: pd.DataFrame, columns: Iterable[str] = FEATURE
         first_bad = int(np.flatnonzero(bad.to_numpy())[0])
         raise ValueError(f"Non-numeric or missing feature value at row {first_bad}")
 
-    if not frame["pqi_star"].between(0, 100).all():
+    if not numeric["pqi_star"].between(0, 100).all():
         raise ValueError("pqi_star must be in [0, 100].")
 
-    density_cols = [
+    nonnegative_cols = [
+        "esal_1e4",
+        "precip_mm",
+        "temp_range_c",
+        "low_temp_days",
+    ]
+    for name in nonnegative_cols:
+        if not (numeric[name] >= 0).all():
+            raise ValueError(f"{name} must be non-negative.")
+
+    bounded_cols = [
         "density_transverse",
         "density_longitudinal",
         "density_alligator",
@@ -45,8 +55,8 @@ def validate_feature_table(frame: pd.DataFrame, columns: Iterable[str] = FEATURE
         "intensity_std",
         "intensity_low_prop",
     ]
-    for name in density_cols:
-        if not frame[name].between(0, 1).all():
+    for name in bounded_cols:
+        if not numeric[name].between(0, 1).all():
             raise ValueError(f"{name} must be in [0, 1].")
 
 
@@ -60,5 +70,4 @@ def load_feature_table(path: str | Path) -> pd.DataFrame:
 def feature_array(frame: pd.DataFrame) -> np.ndarray:
     """Return the 12-dimensional feature matrix in manuscript order."""
     validate_feature_table(frame)
-    return frame[FEATURE_COLUMNS].to_numpy(dtype=np.float32)
-
+    return frame[FEATURE_COLUMNS].apply(pd.to_numeric).to_numpy(dtype=np.float32)

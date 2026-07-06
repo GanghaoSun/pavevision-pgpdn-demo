@@ -1,4 +1,4 @@
-"""PG-PDN model architecture for public method inspection.
+"""PG-PDN model architecture for method inspection.
 
 Inputs:
     Tensor shaped (..., 12) in the feature order documented in constants.py.
@@ -7,11 +7,12 @@ Outputs:
     Predicted deterioration in normalized PQI* units and in PQI* points.
 
 Chapter:
-    Manuscript subsection: Physics-guided pavement degradation prediction network.
+    Manuscript Section 3: Physics-guided pavement degradation prediction
+    network.
 
 Notes:
-    This file provides the public architecture and tensor interface used by
-    the demonstration package.
+    This file provides the PG-PDN architecture, tensor interface and loss
+    implementation corresponding to the manuscript method description.
 """
 
 from __future__ import annotations
@@ -28,7 +29,7 @@ from .constants import PHYSICAL_PARAMETER_DEFAULTS
 
 @dataclass
 class PGPDNConfig:
-    """Configuration matching the manuscript unless explicitly changed."""
+    """Section 3 reference configuration for the PG-PDN method."""
 
     input_dim: int = 12
     residual_input_dim: int = 8
@@ -41,9 +42,9 @@ class PGPDNConfig:
 
 
 class PhysicalBranch(nn.Module):
-    """Interpretable physical degradation branch.
+    """Section 3 physical degradation branch.
 
-    The branch implements:
+    The branch implements the manuscript physical deterioration-rate term:
         r_phys = max(0, alpha0 + alpha1*log(1+ESAL) + alpha2*P
                      + alpha3*DeltaT + alpha4*F
                      + sum(beta_k*D_k) + gamma*(1-I_mean)).
@@ -56,6 +57,7 @@ class PhysicalBranch(nn.Module):
         super().__init__()
         self.config = config
         defaults = defaults or PHYSICAL_PARAMETER_DEFAULTS
+        # Parameter order follows the Section 3 physical-branch equation.
         ordered = [
             "alpha0",
             "alpha1",
@@ -73,6 +75,7 @@ class PhysicalBranch(nn.Module):
         self.theta = nn.Parameter(initial.clone())
 
     def clipped_theta(self) -> Tensor:
+        """Clip physical parameters around their Section 3 initial values."""
         ratio = self.config.parameter_clip_ratio
         lower = self.initial * (1.0 - ratio)
         upper = self.initial * (1.0 + ratio)
@@ -104,7 +107,7 @@ class PhysicalBranch(nn.Module):
 
 
 class PGPDN(nn.Module):
-    """Physics-guided pavement degradation prediction network."""
+    """Section 3 PG-PDN with physical and residual deterioration branches."""
 
     def __init__(self, config: PGPDNConfig | None = None) -> None:
         super().__init__()
@@ -120,6 +123,7 @@ class PGPDN(nn.Module):
         self.fc = nn.Linear(self.config.hidden_dim, 1)
 
     def residual_inputs(self, x: Tensor) -> Tensor:
+        """Build the Section 3 residual-branch input subset."""
         pqi_norm = torch.clamp(x[..., 0:1] / self.config.pqi_scale, 0.0, 1.0)
         return torch.cat([pqi_norm, x[..., 5:9], x[..., 9:12]], dim=-1)
 
@@ -128,9 +132,11 @@ class PGPDN(nn.Module):
             raise ValueError(f"Expected last dimension {self.config.input_dim}, got {x.shape[-1]}")
 
         pqi_norm = torch.clamp(x[..., 0] / self.config.pqi_scale, 0.0, 1.0)
+        # Physical branch: Section 3 deterioration-rate equation.
         r_phys = self.physical(x)
         delta_phys_norm = pqi_norm * r_phys
 
+        # Residual branch: GRU correction on PQI*, distress and intensity terms.
         residual_x = self.residual_inputs(x)
         if residual_x.ndim == 1:
             residual_x = residual_x.unsqueeze(0).unsqueeze(1)
@@ -139,6 +145,7 @@ class PGPDN(nn.Module):
         gru_out, _ = self.gru(residual_x)
         residual_norm = self.fc(self.dropout(gru_out[:, -1, :])).squeeze(-1)
 
+        # PG-PDN output equation: physical contribution plus residual correction.
         delta_norm = delta_phys_norm + residual_norm
         next_pqi_points = torch.clamp(x[..., 0] - delta_norm * self.config.pqi_scale, min=0.0, max=100.0)
         return {
@@ -152,7 +159,11 @@ class PGPDN(nn.Module):
 
 
 class PGPDNLoss(nn.Module):
-    """Composite loss used for PG-PDN training."""
+    """Section 3 composite PG-PDN objective.
+
+    The returned terms correspond to prediction error, non-negative
+    deterioration regularization and along-route smoothness regularization.
+    """
 
     def __init__(self, config: PGPDNConfig | None = None) -> None:
         super().__init__()

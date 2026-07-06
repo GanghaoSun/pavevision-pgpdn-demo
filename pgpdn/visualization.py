@@ -1,4 +1,4 @@
-"""Visualization helpers for synthetic PG-PDN demonstrations.
+"""Visualization helpers for Frenet-coordinate PG-PDN inspection.
 
 The functions here are intentionally data-agnostic. They operate on tables
 with Frenet coordinates and PQI* values and do not require raw survey
@@ -52,9 +52,8 @@ def plot_quality_scatter(frame: pd.DataFrame, output: str | Path, value_col: str
     )
     ax.set_xlabel("Arc length s (m)")
     ax.set_ylabel("Lateral offset d (m)")
-    ax.set_title("Synthetic grid-level PQI* map")
+    ax.set_title("Grid-level PQI* map")
     cbar = fig.colorbar(sc, ax=ax)
     cbar.set_label("PQI*")
     fig.savefig(output, dpi=300)
     plt.close(fig)
-
